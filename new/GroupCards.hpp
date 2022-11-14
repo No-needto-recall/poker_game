@@ -1,0 +1,44 @@
+#ifndef _CTL_GROUPCARDS_HPP_
+#define _CTL_GROUPCARDS_HPP_
+
+#include "Card.hpp"
+#include <vector>
+#include <algorithm>
+
+using std::vector;
+using std::sort;
+
+using Cards=vector<Card>;
+
+class Card;
+
+class GroupCards 
+{
+public:
+    GroupCards(int nums)
+    :_nums(nums)
+    ,_cards()
+    {
+        _cards.reserve(_nums);
+    }
+    virtual~GroupCards() {}
+    size_t GetNums()const{return _nums;}
+    Card& GetCards(){return _cards.front();}
+    const Card*GetCards()const{return &_cards.front();}
+    Cards& RuturnCards(){return _cards;}
+protected:
+    Cards _cards;
+    size_t _nums;
+
+};
+
+
+namespace GROUP_CARDS{
+    //指定几行几列打印卡牌
+    //row:行 cow:列
+    void PrintCards(const GroupCards &cards, const int row=1,const int cow=5);
+    void SortCardsNum(Cards& cards);
+    void SortCardsColour(Cards& cards);
+}//end of CARDS
+
+#endif
