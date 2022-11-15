@@ -23,7 +23,7 @@ public:
     }
     virtual~GroupCards() {}
     NumsType GetNums()const{return _nums;}
-    const Card*GetCards()const{return &_cards.front();}
+    const Card*GetFirstCards()const{return &_cards.front();}
     Cards& ReturnCards(){return _cards;}
     Cards ReturnCards()const{return _cards;}
 protected:

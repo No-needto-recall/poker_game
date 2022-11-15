@@ -16,7 +16,7 @@ void GROUP_CARDS::PrintCards(const GroupCards &cards,const int row,const int cow
         cards_num=row*cow;
     }
     int cards_pos=0;
-    const Card* arr_cards=cards.GetCards();
+    const Card* arr_cards=cards.GetFirstCards();
     int Line_num=cow;
         for(int i=0;i<cards_num;i+=Line_num ){
     for(int Line=0;Line<Line_num&&Line+i<cards_num;++Line){
