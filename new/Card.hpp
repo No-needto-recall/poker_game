@@ -7,6 +7,7 @@ using std::cout;
 using std::endl;
 using NumType=int;
 using ColourType=int;
+using CardType=char;
 //0,1,2,3
 //♠,♥,♣,♦
 enum Suits:ColourType{
@@ -38,34 +39,34 @@ class Card
     
 public:
     Card()
-    :_num(3)
-    ,_colour(0){}
+    :_card(0)
+    {}
 
     Card(NumType num,ColourType colour) 
-    :_num(num)
-    ,_colour(colour){}
+    :_card(colour*13+(num-2))
+    {}
     
     ~Card() {}
     Card &operator=(const Card &card){
-        this->_num=card._num;
-        this->_colour=card._colour;
+        this->_card=card._card;
         return *this;
     }
     Card(const Card&& card)
-    :_num(card._num)
-    ,_colour(card._colour)
+    :_card(card.GetColour()*13+(card.GetNum()-2))
     {}
     Card(const Card& card)
-    :_num(card._num)
-    ,_colour(card._colour)
+    :_card(card.GetColour()*13+(card.GetNum()-2))
     {}
 
-    NumType GetNum()const{return _num;}
-    ColourType GetColour()const{return _colour;}
+    NumType GetNum()const{return (_card%13)+2;}
+    ColourType GetColour()const{return _card/13;}
 protected:
     //用char一个字节来表示卡牌的点数和花色
-    NumType _num;
-    ColourType _colour;
+    CardType _card;
+    //0 ,1 ,2 ,3 ,4 ,5 ,6 ,7 ,8 ,9 ,10,11,12,
+    //13,14,15,16,17,18,19,20,21,22,23,24,25,
+    //_card%13+2=点数
+    //_card/13=花色
 };
 
 //公共函数

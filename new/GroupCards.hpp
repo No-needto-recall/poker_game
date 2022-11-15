@@ -9,26 +9,26 @@ using std::vector;
 using std::sort;
 
 using Cards=vector<Card>;
+using NumsType=unsigned int;
 
-class Card;
 
 class GroupCards 
 {
 public:
-    GroupCards(int nums)
+    GroupCards(NumsType nums)
     :_nums(nums)
     ,_cards()
     {
         _cards.reserve(_nums);
     }
     virtual~GroupCards() {}
-    size_t GetNums()const{return _nums;}
+    NumsType GetNums()const{return _nums;}
     Card& GetCards(){return _cards.front();}
     const Card*GetCards()const{return &_cards.front();}
     Cards& RuturnCards(){return _cards;}
 protected:
     Cards _cards;
-    size_t _nums;
+    NumsType _nums;
 
 };
 

@@ -12,3 +12,16 @@ void DeckCards::SetDeckCards(){
         }
     }
 }
+
+void DeckCards::Shuffle_Deck(int times){
+    srand(time(NULL));
+    Card tmp;
+    for(int j=0;j<times;++j){
+        for(int i=52-1;i>=0;--i){
+            tmp=_cards[i];
+            int ch=rand()%(i+1);
+            _cards[i]=_cards[ch];
+            _cards[ch]=tmp;
+        }
+    }
+}

@@ -6,7 +6,7 @@ int main()
 {
     DeckCards deck;
     deck.SetDeckCards();
-    GROUP_CARDS::SortCardsColour(deck.RuturnCards());
+    deck.Shuffle_Deck();
     deck.PrintDeckCards(4,13);
     return 0;
 }

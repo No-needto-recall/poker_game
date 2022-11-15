@@ -2,6 +2,15 @@
 
 using namespace CARD;
 
+
+//保证下标访问安全
+template<>
+Card & vector<Card>::operator[](size_t x){
+    x=x%size();
+    return *(begin()+x);
+}
+
+
 void GROUP_CARDS::PrintCards(const GroupCards &cards,const int row,const int cow){
     //指定打印几row行，几cow列卡牌
     

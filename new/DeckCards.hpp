@@ -2,13 +2,15 @@
 #define _CTL_DECKCARDS_HPP_
 
 #include "GroupCards.hpp"
+#include <random>
 
+using UseType=unsigned int;
 
 class DeckCards
 :public GroupCards
 {
 public:
-    DeckCards(int nums=52)
+    DeckCards(NumsType nums=52)
     :GroupCards(nums)
     ,_used(0)
     {}
@@ -16,8 +18,14 @@ public:
     void PrintDeckCards(int row=13,int cow=4)const; 
     void SetDeckCards();
 
+    Card SendCard(){
+        _used=_used%_nums;
+        return _cards[_used++];}
+    void ResetSend(){_used=0;}
+
+    void Shuffle_Deck(int times=1);
 private:
-    size_t _used;
+    UseType _used;
 };
 
 #endif
