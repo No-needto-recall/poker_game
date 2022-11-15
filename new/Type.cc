@@ -9,6 +9,12 @@ Type::Type(Cards cards5)
     GROUP_CARDS::SortCardsNum(_cards);
 }
 
+void Type::show()const{
+    TYPE::PrintType(_type);
+    cout<<endl;
+    GROUP_CARDS::PrintCards(*this, 1, 5);
+}
+
 TypeType TYPE::GetType(const Cards&cards5){
     //暂存,排序
     Cards tmp=cards5;

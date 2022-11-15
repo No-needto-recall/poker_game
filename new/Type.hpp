@@ -49,6 +49,7 @@ public:
     bool operator ==(const Type &)const;
     bool operator >=(const Type &)const;
     bool operator <=(const Type &)const;
+    void show()const;
 private:
     TypeType  _type;
     Compare _greadter;
