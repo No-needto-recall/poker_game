@@ -79,7 +79,7 @@ inline void PrintColour(const ColourType&);
 
 namespace CARD{
 
-inline void PrintColour(const NumType&colour){
+inline void PrintColour(const ColourType&colour){
         if(colour==SUITS_SPADE){
             cout<<"\033[34m♠\033[0m";
         }else if(colour==SUITS_CLUBS){
@@ -91,11 +91,11 @@ inline void PrintColour(const NumType&colour){
         }
     }
 
-inline void PrintNum(const ColourType&num){
-     if(num==11){cout<<"J";}
-    else if(num==12){cout<<"Q";}
-    else if(num==13){cout<<"K";}
-    else if(num==14){cout<<"A";}
+inline void PrintNum(const NumType&num){
+     if(num==NUM_J){cout<<"J";}
+    else if(num==NUM_Q){cout<<"Q";}
+    else if(num==NUM_K){cout<<"K";}
+    else if(num==NUM_A){cout<<"A";}
     else {cout<<static_cast<int>(num);}
 }    
 

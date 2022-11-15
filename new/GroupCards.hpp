@@ -25,7 +25,8 @@ public:
     NumsType GetNums()const{return _nums;}
     Card& GetCards(){return _cards.front();}
     const Card*GetCards()const{return &_cards.front();}
-    Cards& RuturnCards(){return _cards;}
+    Cards& ReturnCards(){return _cards;}
+    Cards ReturnCards()const{return _cards;}
 protected:
     Cards _cards;
     NumsType _nums;
