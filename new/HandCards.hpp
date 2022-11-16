@@ -32,8 +32,6 @@ inline void HandCards::AutoGet(){
 }
 
 
-void HandCards::show()const{
-    GROUP_CARDS::PrintCards(*this,1,GetSize());
-}
+
 
 #endif

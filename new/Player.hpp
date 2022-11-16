@@ -19,9 +19,11 @@ public:
     void AutoGetCardsSafe(){_handcards.AutoGetSafe();}
     void CleanHandCards(){_handcards.CleanCards();}
     void RebindDeck(DeckCards & deck){_handcards.RebindDeck(deck);}
-    void ShowHandCards(){_handcards.show();}
+    void ShowHandCards();
+    void ShowType();
     //用于分析手牌与公共牌
     Cards ReturnHandCards()const{return  _handcards.ReturnCards();}
+    string GetName(){return _name;}
 private:
     string _name;
     HandCards _handcards;

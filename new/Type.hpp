@@ -34,6 +34,7 @@ namespace TYPE{
     void PrintType(TypeType type);
 
     Compare SetGreadter(const TypeType type);
+    Type GainType(Cards cards);
 }//end of TYPE
 
 
@@ -54,17 +55,19 @@ public:
     bool operator ==(const Type &)const;
     bool operator >=(const Type &)const;
     bool operator <=(const Type &)const;
+    
     void Show()const;
     void SetCards(Cards cards);
     void SetType(TypeType type);
     void SetGreadter(){_greadter=TYPE::SetGreadter(_type);}
+    TypeType GetType(){return _type;}
 private:
     Compare _greadter;
     TypeType  _type;
 };
 
 
-
+//设置_type并获取对应的比较函数
 inline void Type::SetType(TypeType type){
     _type=type;
     SetGreadter();

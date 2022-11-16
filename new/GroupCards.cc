@@ -8,20 +8,6 @@ Card& Cards::operator[](size_t x){
     return *(begin()+x);
 }
 
-template<>
-Cards Cards::operator+(Cards& Lcards,Cards & Rcards){
-    Cards tmp;
-    tmp.reserve(Lcards.size()+Rcards.size());
-    for(auto &rc:Lcards){
-        tmp.push_back(rc);
-    }
-    for(auto &rc:Rcards){
-        tmp.push_back(rc);
-    }
-    return tmp;
-}
-
-
 void GROUP_CARDS::PrintCards(const GroupCards &cards,const int row,const int cow){
     //指定打印几row行，几cow列卡牌
     //暂存卡牌总数
@@ -80,3 +66,16 @@ void GROUP_CARDS::SortCardsColour(Cards&cards){
         return a.GetColour()<b.GetColour();
     });
 }
+
+Cards GROUP_CARDS::CardsAddCards(Cards& Lcards,Cards& Rcards){
+    Cards tmp;
+    tmp.reserve(Lcards.size()+Rcards.size());
+    for(auto &rc:Lcards){
+        tmp.push_back(rc);
+    }
+    for(auto &rc:Rcards){
+        tmp.push_back(rc);
+    }
+    return tmp;
+}
+

@@ -27,9 +27,11 @@ inline void PublicCards::AutoGetSafe(){
         _cards.push_back((*_deck).SendCard());
         _cards.push_back((*_deck).SendCard());
         _cards.push_back((*_deck).SendCard());
+        (*_deck).SendCard();
         return;
     }else if (GetSize()==3){
         _cards.push_back((*_deck).SendCard());
+        (*_deck).SendCard();
         return;
     }else if(GetSize()==4){
         _cards.push_back((*_deck).SendCard());
@@ -41,7 +43,5 @@ inline void PublicCards::AutoGet(){
     _cards.push_back((*_deck).SendCard());
 }
 
-void PublicCards::show()const{
-    GROUP_CARDS::PrintCards(*this,1,GetSize());
-}
+
 #endif

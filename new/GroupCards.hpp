@@ -39,6 +39,7 @@ namespace GROUP_CARDS{
     void PrintCards(const GroupCards &cards, const int row=1,const int cow=5);
     void SortCardsNum(Cards& cards);
     void SortCardsColour(Cards& cards);
+    Cards CardsAddCards(Cards& Lcards,Cards& Rcards);
 }//end of CARDS
 
 #endif

@@ -8,7 +8,7 @@ Type::Type(Cards cards5)
     _cards=cards5;
     GROUP_CARDS::SortCardsNum(_cards);
 }
-
+//设置5张牌给Type的_cards,获取其牌型，改变其比较函数
 void Type::SetCards(Cards cards){
     if(cards.size()!=5){
         cerr<<"Type::SetCards() cards.size()!=5 \n";
@@ -225,4 +225,44 @@ bool EQUA::Equa(const Type & Left,const Type & Right){
         if(Cleft[i].GetNum()!=Cright[i].GetNum()){return false;}
     }
     return true;
+}
+
+Type TYPE::GainType(Cards cards){
+    int Cnum=cards.size();
+    if(Cnum<5){
+        cerr<<"TYPE::GainType() Cnum<5 \n";
+        exit(1);
+    }
+    Type Tret;
+    if(Cnum==5){
+        Tret.SetCards(cards);
+        return Tret;
+    }else{
+        //从N张牌中选5张
+        Cards Ctmp;
+        Type Ttmp;
+        const int Five=5;
+        Ctmp.reserve(Five);
+        int Pick1,Pick2,Pick3,Pick4,Pick5;
+        for(Pick1=0;Pick1<=Cnum-Five;++Pick1){
+            for(Pick2=Pick1+1;Pick2<=Cnum-Five+1;++Pick2){
+                for(Pick3=Pick2+1;Pick3<=Cnum-Five+2;++Pick3){
+                    for(Pick4=Pick3+1;Pick4<=Cnum-Five+3;++Pick4){
+                        for(Pick5=Pick4+1;Pick5<=Cnum-Five+4;++Pick5){
+                            Ctmp[0]=cards[Pick1];
+                            Ctmp[1]=cards[Pick2];
+                            Ctmp[2]=cards[Pick3];
+                            Ctmp[3]=cards[Pick4];
+                            Ctmp[4]=cards[Pick5];
+                            Ttmp.SetCards(Ctmp);
+                            if(Ttmp.GetType()>Tret.GetType()){
+                                Tret.SetCards(Ctmp);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return Tret;
+    }
 }

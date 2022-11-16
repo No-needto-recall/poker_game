@@ -4,7 +4,7 @@ void DeckCards::PrintDeckCards(int row,int cow)const{
     const GroupCards& pgc=*this;
     GROUP_CARDS::PrintCards(pgc,row,cow);
 }
-
+//初始化卡组
 void DeckCards::SetDeckCards(){
     for(int i=0;i<13;++i){
         for(int j=0;j<4;++j){
@@ -12,7 +12,7 @@ void DeckCards::SetDeckCards(){
         }
     }
 }
-
+//洗牌，默认1次
 void DeckCards::ShuffleDeck(int times){
     srand(time(NULL));
     Card tmp;

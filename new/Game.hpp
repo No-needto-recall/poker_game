@@ -6,6 +6,7 @@
 #include <memory>
 
 using std::shared_ptr;
+using std::cin;
 
 using PlayerPtr=shared_ptr<Player>;
 using Players=vector<PlayerPtr>;
@@ -16,11 +17,9 @@ PlayerPtr& vector<PlayerPtr>::operator[](size_t pos){
     return *(begin()+pos);
 }
 
-
 namespace GAME{
-    Cards HandCardsAddPublicCards();
+    
 }//end of GAME
-
 
 class Game
 {
@@ -31,7 +30,15 @@ public:
     ,_playersnum(playsnum)
     {}
     ~Game() {}
+    void GameStart();
 
+protected:
+    void CreatPlayers();
+    void SetAllPlayerType();
+    void CircleOfDealing();
+    void CircleOfFlop();
+    void CircleOfTurn();
+    void CircleOfRiver();
 
 private:
     Players _players;
