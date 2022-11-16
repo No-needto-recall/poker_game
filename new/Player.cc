@@ -1,5 +1,10 @@
 #include "Player.hpp"
 
+
+void Player::ShowName(){
+    cout<<GetName()<<endl;
+}
+
 //展示手牌
 void Player::ShowHandCards(){
     _handcards.show();

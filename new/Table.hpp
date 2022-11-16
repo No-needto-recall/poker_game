@@ -10,6 +10,7 @@ public:
     ~Table() {}
     void ShuffleDeck(int times=1);
     void ResetSend(){_deck.ResetSend();}
+    void ResetPublicCards(){_publiccards.CleanCards();}
     DeckCards* ReturnDeckPtr(){return &_deck;}
     PublicCards* ReturnPublicCardsPtr(){return &_publiccards;}
     Cards ReturnPublicCards(){return _publiccards.ReturnCards();}

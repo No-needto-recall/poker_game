@@ -11,12 +11,6 @@ using std::cin;
 using PlayerPtr=shared_ptr<Player>;
 using Players=vector<PlayerPtr>;
 
-template<>
-PlayerPtr& vector<PlayerPtr>::operator[](size_t pos){
-    pos=pos%size();
-    return *(begin()+pos);
-}
-
 namespace GAME{
     
 }//end of GAME
@@ -39,7 +33,7 @@ protected:
     void CircleOfFlop();
     void CircleOfTurn();
     void CircleOfRiver();
-
+    void GameOver();
 private:
     Players _players;
     Table _table;

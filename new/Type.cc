@@ -242,7 +242,7 @@ Type TYPE::GainType(Cards cards){
         Cards Ctmp;
         Type Ttmp;
         const int Five=5;
-        Ctmp.reserve(Five);
+        Ctmp.resize(Five);
         int Pick1,Pick2,Pick3,Pick4,Pick5;
         for(Pick1=0;Pick1<=Cnum-Five;++Pick1){
             for(Pick2=Pick1+1;Pick2<=Cnum-Five+1;++Pick2){

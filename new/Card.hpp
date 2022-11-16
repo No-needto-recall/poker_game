@@ -18,8 +18,9 @@ enum Suits:ColourType{
 };
 //点数2,3,4,5,6,7,8,9,10,J ,Q ,K ,A
 //对应2,3,4,5,6,7,8,9,10,11,12,13,14
-enum Nums:NumType{
-    NUM_2=2,
+enum Nums : NumType
+{
+    NUM_2 = 2,
     NUM_3,
     NUM_4,
     NUM_5,
@@ -48,10 +49,18 @@ public:
     
     ~Card() {}
     Card &operator=(const Card &card){
-        this->_card=card._card;
-        return *this;
+        if(this!=&card){
+            this->_card = card._card;
+         }
+            return *this;
+   }
+    Card &operator=(Card &&card){
+        if(this!=&card){
+            this->_card = card._card;
+         }
+            return *this;
     }
-    Card(const Card&& card)
+    Card(Card&& card)
     :_card(card.GetColour()*13+(card.GetNum()-2))
     {}
     Card(const Card& card)

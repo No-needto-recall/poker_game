@@ -49,14 +49,45 @@ public:
     ,_type(0)
     {}
     Type(Cards cards5);
+    Type(const Type &rhs)
+        : GroupCards(5), _greadter(rhs._greadter), _type(rhs._type)
+    {_cards = rhs._cards;}
+    Type(Type &&rhs)
+        : GroupCards(5), _greadter(rhs._greadter), _type(rhs._type)
+    {_cards=rhs._cards;}
+
+    Type &operator=(const Type &rhs){
+        if(this!=&rhs){
+            this->_cards = rhs._cards;
+            this->_greadter=rhs._greadter;
+            this->_type=rhs._type;
+        }
+        return *this;
+   }
+   Type &operator=(Type &&rhs)
+   {
+       if (this != &rhs)
+       {
+           this->_cards = rhs._cards;
+           this->_greadter = rhs._greadter;
+           this->_type = rhs._type;
+       }
+       return *this;
+   }
+
     ~Type() {}
     bool operator >(const Type &)const ;
     bool operator <(const Type &)const;
     bool operator ==(const Type &)const;
     bool operator >=(const Type &)const;
     bool operator <=(const Type &)const;
-    
+     
     void Show()const;
+    void ResetType(){
+        _greadter=nullptr;
+        _type=0;
+        _cards.clear();
+    }
     void SetCards(Cards cards);
     void SetType(TypeType type);
     void SetGreadter(){_greadter=TYPE::SetGreadter(_type);}

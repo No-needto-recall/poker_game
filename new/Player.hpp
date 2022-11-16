@@ -21,6 +21,7 @@ public:
     void RebindDeck(DeckCards & deck){_handcards.RebindDeck(deck);}
     void ShowHandCards();
     void ShowType();
+    void ShowName();
     //用于分析手牌与公共牌
     Cards ReturnHandCards()const{return  _handcards.ReturnCards();}
     string GetName(){return _name;}
