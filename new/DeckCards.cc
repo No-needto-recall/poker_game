@@ -13,7 +13,7 @@ void DeckCards::SetDeckCards(){
     }
 }
 
-void DeckCards::Shuffle_Deck(int times){
+void DeckCards::ShuffleDeck(int times){
     srand(time(NULL));
     Card tmp;
     for(int j=0;j<times;++j){

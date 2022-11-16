@@ -23,7 +23,7 @@ public:
         return _cards[_used++];}
     void ResetSend(){_used=0;}
 
-    void Shuffle_Deck(int times=1);
+    void ShuffleDeck(int times=1);
 private:
     UseType _used;
 };

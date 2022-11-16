@@ -13,23 +13,27 @@ public:
     {}
     ~HandCards() {}
     void show()const;
-    void GetCard(Card card);
+    void AutoGetSafe();
     void AutoGet();
     void CleanCards(){_cards.clear();}
     void RebindDeck(DeckCards& deck){_deck=&deck;}
 private:
     DeckCards* _deck;
 };
-void HandCards::AutoGet(){
+
+inline void HandCards::AutoGetSafe(){
+    if(GetSize()==0||GetSize()==1){
+        _cards.push_back((*_deck).SendCard());
+    }else{}
+}
+
+inline void HandCards::AutoGet(){
     _cards.push_back((*_deck).SendCard());
 }
 
 
 void HandCards::show()const{
-    GROUP_CARDS::PrintCards(*this,1,2);
+    GROUP_CARDS::PrintCards(*this,1,GetSize());
 }
 
-void HandCards::GetCard(Card card){
-    _cards.push_back(card);
-}
 #endif

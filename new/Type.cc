@@ -9,7 +9,20 @@ Type::Type(Cards cards5)
     GROUP_CARDS::SortCardsNum(_cards);
 }
 
-void Type::show()const{
+void Type::SetCards(Cards cards){
+    if(cards.size()!=5){
+        cerr<<"Type::SetCards() cards.size()!=5 \n";
+        return;
+    }
+    _cards=cards;
+    SetType(TYPE::GetType(_cards));
+}
+
+void Type::Show()const{
+    if(_type==0){
+        cerr<<"Type::Show()const _type==0 \n";
+        return;
+    }
     TYPE::PrintType(_type);
     cout<<endl;
     GROUP_CARDS::PrintCards(*this, 1, 5);

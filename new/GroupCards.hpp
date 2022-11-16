@@ -11,7 +11,6 @@ using std::sort;
 using Cards=vector<Card>;
 using NumsType=unsigned int;
 
-
 class GroupCards 
 {
 public:
@@ -23,6 +22,7 @@ public:
     }
     virtual~GroupCards() {}
     NumsType GetNums()const{return _nums;}
+    size_t GetSize()const{return _cards.size();}
     const Card*GetFirstCards()const{return &_cards.front();}
     Cards& ReturnCards(){return _cards;}
     Cards ReturnCards()const{return _cards;}

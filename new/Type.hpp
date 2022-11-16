@@ -7,7 +7,7 @@
 
 using std::map;
 using std::function;
-
+using std::cerr;
 
 using TypeType=unsigned int;
 enum TypeCards:TypeType{
@@ -42,6 +42,11 @@ class Type
 :public GroupCards
 {
 public:
+    Type()
+    :GroupCards(5)
+    ,_greadter(nullptr)
+    ,_type(0)
+    {}
     Type(Cards cards5);
     ~Type() {}
     bool operator >(const Type &)const ;
@@ -49,11 +54,21 @@ public:
     bool operator ==(const Type &)const;
     bool operator >=(const Type &)const;
     bool operator <=(const Type &)const;
-    void show()const;
+    void Show()const;
+    void SetCards(Cards cards);
+    void SetType(TypeType type);
+    void SetGreadter(){_greadter=TYPE::SetGreadter(_type);}
 private:
-    TypeType  _type;
     Compare _greadter;
+    TypeType  _type;
 };
+
+
+
+inline void Type::SetType(TypeType type){
+    _type=type;
+    SetGreadter();
+}
 
 
 #endif

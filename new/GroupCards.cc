@@ -2,16 +2,31 @@
 
 using namespace CARD;
 
+template<>
+Card& Cards::operator[](size_t x){
+    x=x%size();
+    return *(begin()+x);
+}
 
-
+template<>
+Cards Cards::operator+(Cards& Lcards,Cards & Rcards){
+    Cards tmp;
+    tmp.reserve(Lcards.size()+Rcards.size());
+    for(auto &rc:Lcards){
+        tmp.push_back(rc);
+    }
+    for(auto &rc:Rcards){
+        tmp.push_back(rc);
+    }
+    return tmp;
+}
 
 
 void GROUP_CARDS::PrintCards(const GroupCards &cards,const int row,const int cow){
     //指定打印几row行，几cow列卡牌
-    
     //暂存卡牌总数
     
-    int cards_num=cards.GetNums(); 
+    int cards_num=cards.GetSize(); 
     if(row*cow<cards_num){
         cards_num=row*cow;
     }
