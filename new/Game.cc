@@ -32,6 +32,14 @@ void Game::SetAllPlayerCallOut(){
     }
 }
 
+void Game::SetLessPlayerCallOut(){
+    for(auto &rp:_players){
+        if(rp.get()->_chips.PeekBet()<_table._jackpot.PeekMaxBet()){
+            rp.get()->SetCallOut();
+        }
+    }
+}
+
 int Game::GetAlivePlayerNum(){
     int ret=0;
     for(auto &rp:_players){
@@ -56,7 +64,7 @@ bool Game::CircleOfPreflop(){
       {
           if(1==_alivenum){return true;}
           if(rp.get()->PlayerAction(_table,_alivenum)){
-              SetAllPlayerCallOut();
+              SetLessPlayerCallOut();
               rp.get()->SetCallIn();
           }
       }
@@ -138,16 +146,65 @@ void Game::GameStart(){
         SetAllPlayerType();
         CircleOfRiver();
         
-        cout<<"展示"<<endl;
-        for(auto &rp:_players){
+        cout<<">>ShowHand"<<endl;
+        ShowHand();
+        GameSettle(); 
+        GameOver();
+        if(times==20){
+            cin>>times;
+            if(times==0){break;};
+        }
+    }
+}
+
+//展示所有存活玩家的手牌，同时将牌力较小的玩家Out
+void Game::ShowHand(){
+    Type tmp(_table.ReturnPublicCards());
+    for(auto& rp:_players){
+        if(rp.get()->IsAlive()){
+            cout<<rp.get()->GetName()<<" : ";
+            rp.get()->ShowType();
+            rp.get()->ShowHandCards();
+            if(rp.get()->_type>=tmp){
+                tmp=rp.get()->_type;
+            }
+        }
+    }
+    for(auto&rp:_players){
+        if(rp.get()->IsAlive()){
+            if(rp.get()->_type<tmp){
+                rp.get()->SetPlayerOut();
+                cout<<">>"<<rp.get()->GetName()<<" : Lose"<<endl;
+                --_alivenum;
+            }else{
+                cout<<">>"<<rp.get()->GetName()<<" : Win"<<endl;
+            }
+        }
+    }
+}
+//结算本局游戏
+//所有存活的玩家平分奖池
+void Game::GameSettle(){
+    ChipType wintmp=_table._jackpot.PeekChip()/_alivenum;
+    cout << ">>最终奖池 " << _table._jackpot.PeekChip() << endl;
+    cout<<">>获胜玩家: "<<endl;
+    for(auto&rp:_players){
+        if(rp.get()->IsAlive()){
             rp.get()->ShowName();
             rp.get()->ShowType();
             rp.get()->ShowHandCards();
+            rp.get()->_chips.GetChip(wintmp);
+            _table._jackpot.UseChip(wintmp);
         }
-        GameOver();
-        int TmpCin;
-        cin>>TmpCin;
-        if(TmpCin==1){break;}
+    }
+    cout<<">>结算游戏"<<endl;
+    cout << ">>奖池剩余 " << _table._jackpot.PeekChip() << endl;
+    for(auto&rp:_players){
+        cout<<rp.get()->GetName()<<": ";
+        if(rp.get()->IsAlive()){
+            cout<<"+("<<wintmp<<") ";
+        }
+        cout<<rp.get()->_chips.PeekChip()<<endl;
     }
 }
 

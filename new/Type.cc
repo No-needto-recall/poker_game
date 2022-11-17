@@ -27,7 +27,7 @@ void Type::Show()const{
     cout<<endl;
     GROUP_CARDS::PrintCards(*this, 1, 5);
 }
-
+//根据5张牌，判断牌力
 TypeType TYPE::GetType(const Cards&cards5){
     //暂存,排序
     Cards tmp=cards5;
@@ -122,6 +122,9 @@ Compare TYPE::SetGreadter(const TypeType type){
 bool Type::operator>(const Type&rhs)const{
     if(this->_type==rhs._type){return GREADER::KindCard(*this,rhs);}
     return this->_type>rhs._type;
+}
+bool Type::operator<(const Type&rhs)const{
+    return !(*(this)>=rhs);
 }
 
 bool Type::operator==(const Type&rhs)const{

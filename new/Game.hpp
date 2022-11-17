@@ -36,9 +36,11 @@ protected:
     bool CircleOfTurn();
     bool CircleOfRiver();
     void ShowHand();
+    void GameSettle();
     void GameOver();
     bool IsAllPlayerCall();
     void SetAllPlayerCallOut();
+    void SetLessPlayerCallOut();
     int GetAlivePlayerNum();
 
 private:
