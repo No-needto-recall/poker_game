@@ -4,6 +4,7 @@
 #include "Table.hpp"
 #include "Player.hpp"
 #include <memory>
+#include <cstdio>
 
 using std::shared_ptr;
 using std::cin;
@@ -12,7 +13,7 @@ using PlayerPtr=shared_ptr<Player>;
 using Players=vector<PlayerPtr>;
 
 namespace GAME{
-    
+    bool GameGoEnd();
 }//end of GAME
 
 class Game
@@ -38,6 +39,7 @@ protected:
     void ShowHand();
     void GameSettle();
     void GameOver();
+    void GameHaveWiner();
     bool IsAllPlayerCall();
     void SetAllPlayerCallOut();
     void SetLessPlayerCallOut();

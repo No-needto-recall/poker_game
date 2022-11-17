@@ -102,6 +102,11 @@ bool Game::CircleOfRiver(){
     return CircleOfFlop();
 }
 
+void Game::GameHaveWiner(){
+    ShowHand();
+    GameSettle();
+    GameOver();
+}
 
 void Game::GameStart(){
     CreatPlayers();
@@ -123,36 +128,47 @@ void Game::GameStart(){
         }
         //发牌圈
         cout<<">>发牌圈"<<endl;
-        CircleOfPreflop();
+        if(CircleOfPreflop()){
+            GameHaveWiner();
+           continue;
+        }
 
         //翻牌圈
         cout<<">>翻牌圈"<<endl;
         _table.AutoSendToPublicCards();    
         _table.ShowPublicCards(); 
         SetAllPlayerType();
-        CircleOfFlop();
+        if(CircleOfFlop()){
+            GameHaveWiner();
+            continue;
+        }
 
         //转牌圈
         cout<<">>转牌圈"<<endl;
         _table.AutoSendToPublicCards();
         _table.ShowPublicCards();
         SetAllPlayerType();
-        CircleOfTurn();
+        if(CircleOfTurn()){
+            GameHaveWiner();
+            continue;
+        }
         
         //河牌圈
         cout<<">>河牌圈"<<endl;
         _table.AutoSendToPublicCards();
         _table.ShowPublicCards();
         SetAllPlayerType();
-        CircleOfRiver();
+        if(CircleOfRiver()){
+            GameHaveWiner();
+            continue;
+        }
         
         cout<<">>ShowHand"<<endl;
         ShowHand();
         GameSettle(); 
         GameOver();
-        if(times==20){
-            cin>>times;
-            if(times==0){break;};
+        if(GAME::GameGoEnd()){
+            break;
         }
     }
 }
@@ -242,3 +258,23 @@ void Game::SetAllPlayerType(){
 
 }
 
+bool GAME::GameGoEnd(){
+    
+    while (1)
+    {
+        cout<<">>是否继续游戏(y/n):";
+        char tmp;
+        system("stty -icanon");
+        cin>>tmp;
+        if(tmp=='y'||tmp=='Y'){
+            system("stty icanon");
+            cout<<endl;
+            return false;
+        }else if(tmp=='n'||tmp=='N'){
+            system("stty icanon");
+            cout<<endl;
+            return true;}
+        cout<<"\r\033[K";
+    }
+    
+}
