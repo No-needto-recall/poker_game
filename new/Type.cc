@@ -255,7 +255,7 @@ Type TYPE::GainType(Cards cards){
                             Ctmp[3]=cards[Pick4];
                             Ctmp[4]=cards[Pick5];
                             Ttmp.SetCards(Ctmp);
-                            if(Ttmp.GetType()>Tret.GetType()){
+                            if(Ttmp>Tret){
                                 Tret.SetCards(Ctmp);
                             }
                         }
