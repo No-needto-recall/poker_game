@@ -29,11 +29,13 @@ public:
 protected:
     void CreatPlayers();
     void SetAllPlayerType();
-    void CircleOfDealing();
+    void CircleOfPreflop();
     void CircleOfFlop();
     void CircleOfTurn();
     void CircleOfRiver();
     void GameOver();
+    bool IsAllPlayerCall();
+    void SetAllPlayerCallOut();
 private:
     Players _players;
     Table _table;

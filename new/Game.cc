@@ -14,11 +14,40 @@ void Game::CreatPlayers(){
         string name = "玩家 ";
         name.append(std::to_string(i));
         DeckCards* deckptr=_table.ReturnDeckPtr();
-        PlayerPtr tmp(new Player(name,*deckptr));
+        PlayerPtr tmp(new BotPlayer(name,*deckptr));
         _players.push_back(tmp);
     }
 }
-void Game::CircleOfDealing(){}
+
+bool Game::IsAllPlayerCall(){
+    for(auto &rp:_players){
+        if(rp.get()->IsCall()){continue;}
+        else{return false;}
+    }
+    return true;
+}
+void Game::SetAllPlayerCallOut(){
+    for(auto &rp:_players){
+        rp.get()->SetCallOut();
+    }
+}
+
+void Game::CircleOfPreflop(){
+    while(1){
+        for (auto &rp : _players)
+        {
+            //存活且没有操作过
+            if (rp.get()->IsAlive() && !(rp.get()->IsCall()))
+            {
+                rp.get()->PlayerAction(_table);
+            }
+        }
+        if(IsAllPlayerCall()){break;}
+    }
+    SetAllPlayerCallOut();
+    return;
+
+}
 void Game::CircleOfFlop(){}
 void Game::CircleOfTurn(){}
 void Game::CircleOfRiver(){}
@@ -44,7 +73,7 @@ void Game::GameStart(){
         }
         //发牌圈
         cout<<">>发牌圈"<<endl;
-        CircleOfDealing();
+        CircleOfPreflop();
 
         //翻牌圈
         cout<<">>翻牌圈"<<endl;
