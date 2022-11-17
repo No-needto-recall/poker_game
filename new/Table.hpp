@@ -6,7 +6,7 @@
 class Table
 {
 public:
-    Table(); 
+    Table(int smallblind=10); 
     ~Table() {}
     //洗牌
     void ShuffleDeck(int times=1);
@@ -29,6 +29,7 @@ private:
 public:
     //奖池
     Jackpot _jackpot;
+    int _smallblind;
 };
 
 

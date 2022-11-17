@@ -15,8 +15,27 @@ void Player::ShowType(){
     _type.Show();
 }
 
+void Player::PlayerBlindBet(Table& table){
 
-void BotPlayer::PlayerAction(Table& table){
+    Jackpot & jackpot=table._jackpot;
+    ChipType OldJackpot = jackpot.PeekChip();
+    ChipType OldMaxbet = jackpot.PeekMaxBet();
+    ChipType Oldbet=_chips.PeekBet();
+    ChipType smallblind=table._smallblind;
+    string tmp=" : 压小盲注 ";
+    ChipType usetmp=smallblind;
+    if(OldMaxbet==smallblind){usetmp=2*smallblind;tmp=" : 压大盲注 ";}
+    _chips.UseChip(usetmp);
+    _chips.UpdateBet(usetmp);
+    jackpot.GetChip(usetmp);
+    jackpot.UpdateMaxBet(_chips.PeekBet());
+    cout<<GetName()<<tmp<<Oldbet<<"->"<<usetmp
+        <<" ("<<OldJackpot<<")-->("<<jackpot.PeekChip()<<")"<<endl;
+}
+
+
+bool BotPlayer::PlayerAction(Table& table,int & alivenum){
+    bool retbool=true;
     SetCallIn();
     Jackpot & jackpot=table._jackpot;    
     Chips & chips=_chips;
@@ -28,39 +47,40 @@ void BotPlayer::PlayerAction(Table& table){
     if(AutoAction(jackpot,usetmp)){
         ChipType OldJackpot = jackpot.PeekChip();
         ChipType OldMaxbet = jackpot.PeekMaxBet();
-        ChipType OldChips = chips.PeekChip();
         ChipType OldBet = chips.PeekBet();
         chips.UseChip(usetmp);
-        chips.UpdateBet(jackpot.PeekMaxBet());
+        chips.UpdateBet(usetmp);
         jackpot.GetChip(usetmp);
-        jackpot.UpdateMaxBet(usetmp); 
+        jackpot.UpdateMaxBet(chips.PeekBet()); 
         if(OldMaxbet==jackpot.PeekMaxBet()){
             //跟注
             if(OldBet==chips.PeekBet()){
                 cout<<" 过 (check) ";
+                retbool=false;
             }else{
                 if(chips.IsEmpty()){
                     cout<<"ALL IN ";
                 }
                 cout << "跟注 (Call) ";
-                cout << OldBet << " -> " << chips.PeekBet();
+                cout << OldBet << "->" << chips.PeekBet();
             }
         }else{
             if(chips.IsEmpty()){
                 cout << "ALL IN ";
             }
             cout<<"加注 (Raise) ";
-            cout << OldBet << " -> " << chips.PeekBet();
+            cout << OldBet << "->" << chips.PeekBet();
         }
         cout<<" ("<<OldJackpot
-            <<") --> ("<<jackpot.PeekChip()
+            <<")-->("<<jackpot.PeekChip()
             <<")";
     }else{
         cout<<"弃牌 (Fold) ";
         SetPlayerOut();
+        --alivenum;
     }
     cout << endl;
-    return;
+    return retbool;
 }
 
 bool BotPlayer::AutoAction(Jackpot & jackpot,ChipType &usetmp){

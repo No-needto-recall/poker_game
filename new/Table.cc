@@ -2,10 +2,11 @@
 
 
 //Table的默认构造函数将会设置好卡组和公共牌
-Table::Table()
+Table::Table(int smallblind)
 :_deck()
 ,_publiccards(_deck)
 ,_jackpot()
+,_smallblind(smallblind)
 {
     _deck.SetDeckCards();
 }

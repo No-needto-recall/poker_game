@@ -18,10 +18,12 @@ namespace GAME{
 class Game
 {
 public:
-    Game(int playsnum=2)
+    Game(int playsnum=3,int smallblind=10)
     :_players()
-    ,_table()
+    ,_table(smallblind)
     ,_playersnum(playsnum)
+    ,_alivenum(_playersnum)
+    ,_dealerpos(0)
     {}
     ~Game() {}
     void GameStart();
@@ -29,18 +31,22 @@ public:
 protected:
     void CreatPlayers();
     void SetAllPlayerType();
-    void CircleOfPreflop();
-    void CircleOfFlop();
-    void CircleOfTurn();
-    void CircleOfRiver();
+    bool CircleOfPreflop();
+    bool CircleOfFlop();
+    bool CircleOfTurn();
+    bool CircleOfRiver();
+    void ShowHand();
     void GameOver();
     bool IsAllPlayerCall();
     void SetAllPlayerCallOut();
+    int GetAlivePlayerNum();
+
 private:
     Players _players;
     Table _table;
     int _playersnum;
-
+    int _alivenum;
+    int _dealerpos;
 };
 
 #endif

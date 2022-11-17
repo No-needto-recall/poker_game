@@ -3,7 +3,7 @@
 Type::Type(Cards cards5)
 :GroupCards(5)
 ,_type(TYPE::GetType(cards5))
-,_greadter(TYPE::SetGreadter(_type))
+// ,_greadter(TYPE::SetGreadter(_type))
 {
     _cards=cards5;
     GROUP_CARDS::SortCardsNum(_cards);
@@ -104,29 +104,33 @@ void TYPE::PrintType(TypeType type){
     else if(type==STRAIGHT_FLUSH){cout<<"同花顺 (Straight Flush)";}
     else {cout<<"皇家同花顺 (Royal Flush)";}
 }
-
+#if 0
 Compare TYPE::SetGreadter(const TypeType type){
-    if(type==HIGH_CARD){return GREADER::HighCard;}
+    if(type==HIGH_CARD){return GREADER::KindCard;}
     else if(type==ONE_PAIR){return GREADER::KindCard;}
     else if(type==TWO_PAIRS){return GREADER::KindCard;}
     else if(type==THREE_OF_A_KIND){return GREADER::KindCard;}
-    else if(type==STRAIGHT){return GREADER::HighCard;}
-    else if(type==FLUSH){return GREADER::HighCard;}
+    else if(type==STRAIGHT){return GREADER::KindCard;}
+    else if(type==FLUSH){return GREADER::KindCard;}
     else if(type==FULL_HOUSE){return GREADER::KindCard;}
     else if(type==FOUR_OF_A_KIND){return GREADER::KindCard;}
-    else if(type==STRAIGHT_FLUSH){return GREADER::HighCard;}
-    else {return GREADER::RoyalFlush;}
+    else if(type==STRAIGHT_FLUSH){return GREADER::KindCard;}
+    else {return GREADER::KindCard;}
 }
-
+#endif
 
 bool Type::operator>(const Type&rhs)const{
-    if(this->_type==rhs._type){return _greadter(*this,rhs);}
+    if(this->_type==rhs._type){return GREADER::KindCard(*this,rhs);}
     return this->_type>rhs._type;
 }
 
 bool Type::operator==(const Type&rhs)const{
     if(this->_type==rhs._type){return EQUA::Equa(*this,rhs);}
     return false;
+}
+
+bool Type::operator!=(const Type&rhs)const{
+    return !(*(this)==rhs);
 }
 
 bool Type::operator>=(const Type&rhs)const{
@@ -136,9 +140,12 @@ bool Type::operator<=(const Type&rhs)const{
     return !(*this>rhs);
 }
 
+#if 0
 bool GREADER::HighCard(const Type & Left,const Type & Right){
     auto Cleft=Left.ReturnCards();
     auto Cright=Right.ReturnCards();
+    GROUP_CARDS::SortCardsNum(Cleft);
+    GROUP_CARDS::SortCardsNum(Cright);
     for(int i=4;i>=0;--i){
         if(Cleft[i].GetNum()!=Cright[i].GetNum()){
             return Cleft[i].GetNum()>Cright[i].GetNum();
@@ -146,9 +153,11 @@ bool GREADER::HighCard(const Type & Left,const Type & Right){
     }
     return false;
 }
+#endif
+
 bool GREADER::KindCard(const Type & Left,const Type & Right){
-    map<NumType,int> numLMap;
-    map<NumType,int> numRMap;
+    map<NumType,int,std::greater<NumType> > numLMap;
+    map<NumType,int,std::greater<NumType> > numRMap;
     auto Cleft=Left.ReturnCards();
     auto Cright=Right.ReturnCards();
     for(int i=0;i<5;++i){
@@ -212,15 +221,19 @@ bool GREADER::KindCard(const Type & Left,const Type & Right){
         return false;
     }
 }
+#if 0
 bool GREADER::RoyalFlush(const Type & Left,const Type & Right){
     auto Cleft=Left.ReturnCards();
     auto Cright=Right.ReturnCards();
     return Cleft[0].GetNum()>Right.GetNums();
 }
+#endif
 
 bool EQUA::Equa(const Type & Left,const Type & Right){
     auto Cleft=Left.ReturnCards();
     auto Cright=Right.ReturnCards();
+    GROUP_CARDS::SortCardsNum(Cleft);
+    GROUP_CARDS::SortCardsNum(Cright);
     for(int i=4;i>=0;--i){
         if(Cleft[i].GetNum()!=Cright[i].GetNum()){return false;}
     }
@@ -265,4 +278,27 @@ Type TYPE::GainType(Cards cards){
         }
         return Tret;
     }
+}
+
+
+
+void TYPE::SwapCards(const Cards &pubcards,Cards &target){
+    int pos=0;
+    int size=target.size();
+    for(int i=0;i<size;++i)
+    {
+        pos=FindCardInCards(pubcards,target[i]);
+        if(pos!=-1){
+            Card tmp=target[i];
+            target[i]=target[pos];
+            target[pos]=tmp;
+        }
+    }
+}
+int TYPE::FindCardInCards(const Cards& pubcards,const Card& contrust){
+    int size=pubcards.size(); 
+    for(int i=0;i<size;++i){
+        if(pubcards[i]==contrust){return i;}
+    }
+    return -1;
 }

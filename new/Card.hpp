@@ -66,6 +66,19 @@ public:
     Card(const Card& card)
     :_card(card.GetColour()*13+(card.GetNum()-2))
     {}
+    bool operator==(const Card &rhs)const{
+        return this->GetNum()==rhs.GetNum()&&this->GetColour()==rhs.GetColour();
+    }
+    bool operator!=(const Card&rhs)const{return !(*(this)==rhs);}
+    bool operator>(const Card &rhs)const{
+        if(this->GetNum()==rhs.GetNum()){return this->GetColour()<rhs.GetColour();}
+        return this->GetNum()>rhs.GetNum();
+    }
+    bool operator<(const Card&rhs)const{return !(*(this)>rhs)&&(*this)!=rhs;}
+    bool operator>=(const Card & rhs)const {
+        return *this>rhs||*this==rhs;
+    }
+    bool operator<=(const Card&rhs)const{return !(*(this)>rhs);}
 
     NumType GetNum()const{return (_card%13)+2;}
     ColourType GetColour()const{return _card/13;}

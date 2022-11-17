@@ -1,6 +1,6 @@
 #include "Game.hpp"
 
-#if 0 
+#if 1 
 template<>
 PlayerPtr& Players::operator[](size_t x){
     x=x%size();
@@ -32,25 +32,67 @@ void Game::SetAllPlayerCallOut(){
     }
 }
 
-void Game::CircleOfPreflop(){
-    while(1){
-        for (auto &rp : _players)
-        {
-            //存活且没有操作过
-            if (rp.get()->IsAlive() && !(rp.get()->IsCall()))
-            {
-                rp.get()->PlayerAction(_table);
-            }
+int Game::GetAlivePlayerNum(){
+    int ret=0;
+    for(auto &rp:_players){
+        if(rp.get()->IsAlive()){
+            ++ret;
         }
-        if(IsAllPlayerCall()){break;}
+    }
+    return  ret;
+}
+
+bool Game::CircleOfPreflop(){
+    int tmppos=_dealerpos+1;
+    _players[tmppos].get()->PlayerBlindBet(_table);
+    ++tmppos;
+    _players[tmppos].get()->PlayerBlindBet(_table);
+    ++tmppos;
+    while(1){
+      auto & rp=  _players[tmppos];
+      //存活且没有操作过
+      //并且还有筹码（ALL IN 无需喊话）
+      if (!(rp.get()->_chips.IsEmpty())&&rp.get()->IsAlive() && !(rp.get()->IsCall()))
+      {
+          if(1==_alivenum){return true;}
+          if(rp.get()->PlayerAction(_table,_alivenum)){
+              SetAllPlayerCallOut();
+              rp.get()->SetCallIn();
+          }
+      }
+      ++tmppos;
+      if(IsAllPlayerCall()){break;}
     }
     SetAllPlayerCallOut();
-    return;
-
+    return false;
 }
-void Game::CircleOfFlop(){}
-void Game::CircleOfTurn(){}
-void Game::CircleOfRiver(){}
+bool Game::CircleOfFlop(){
+    //庄家的下一位开始喊话
+    int tmppos=_dealerpos+1;
+    while(1){
+      auto & rp=  _players[tmppos];
+      //存活且没有操作过
+      //并且还有筹码（ALL IN 无需喊话）
+      if (!(rp.get()->_chips.IsEmpty())&&rp.get()->IsAlive() && !(rp.get()->IsCall()))
+      {
+          if(1==_alivenum){return true;}
+          if(rp.get()->PlayerAction(_table,_alivenum)){
+              SetAllPlayerCallOut();
+              rp.get()->SetCallIn();
+          }
+      }
+      ++tmppos;
+      if(IsAllPlayerCall()){break;}
+    }
+    SetAllPlayerCallOut();
+    return false;
+}
+bool Game::CircleOfTurn(){
+    return CircleOfFlop();
+}
+bool Game::CircleOfRiver(){
+    return CircleOfFlop();
+}
 
 
 void Game::GameStart(){
@@ -118,7 +160,11 @@ void Game::GameOver(){
     for(auto &rp:_players){
         rp.get()->CleanHandCards();
         rp.get()->_type.ResetType();
+        rp.get()->SetCallOut();
+        rp.get()->SetPlayerIn();
     }
+    _alivenum=_playersnum;
+    ++_dealerpos;
 }
 
 //将所有玩家的手牌和桌上的公共牌组合
@@ -134,6 +180,8 @@ void Game::SetAllPlayerType(){
         Cards Rtmp=_table.ReturnPublicCards();
         Cards type=GROUP_CARDS::CardsAddCards(Ltmp,Rtmp);
         rp.get()->_type=TYPE::GainType(type);
+        TYPE::SwapCards(Rtmp,rp.get()->_type.ReturnCards());
     }
+
 }
 

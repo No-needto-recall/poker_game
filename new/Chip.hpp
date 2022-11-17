@@ -40,10 +40,8 @@ public:
     {}
     ~Chips(){}
     //更新下注
-    bool UpdateBet(ChipType bet){
-        if(bet<_bet){return  false;}
-        _bet=bet;
-        return true;
+    void UpdateBet(ChipType use){
+        _bet+=use;
     }
     void CleanBet(){_bet=0;}
     ChipType PeekBet()const{return _bet;}
@@ -61,10 +59,8 @@ public:
     {}
     ~Jackpot(){}
     //跟新最大下注
-    bool UpdateMaxBet(ChipType bet){
-        if(bet<_maxbet){return false;}
-        _maxbet=bet; 
-        return  true;
+    void UpdateMaxBet(ChipType bet){
+        if(bet>_maxbet){_maxbet=bet;}
     }
     void CleanMaxBet(){_maxbet=0;}
     ChipType PeekMaxBet()const{return _maxbet;}
