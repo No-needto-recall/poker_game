@@ -2,7 +2,7 @@
 #define _CTL_GAME_HPP_
 
 #include "Table.hpp"
-#include "Player.hpp"
+#include "BotPlayerLevel0.hpp"
 #include <memory>
 #include <cstdio>
 
