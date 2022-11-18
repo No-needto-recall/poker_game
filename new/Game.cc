@@ -259,10 +259,10 @@ void Game::SetAllPlayerType(){
 }
 
 bool GAME::GameGoEnd(){
-    
+
+    cout << ">>是否继续游戏(y/n):";
     while (1)
     {
-        cout<<">>是否继续游戏(y/n):";
         char tmp;
         system("stty -icanon");
         cin>>tmp;
@@ -274,7 +274,9 @@ bool GAME::GameGoEnd(){
             system("stty icanon");
             cout<<endl;
             return true;}
-        cout<<"\r\033[K";
+        else{
+            cout<<" 输入错误\b\b\b\b\b\b\b\b\b\b";
+        }
     }
     
 }
