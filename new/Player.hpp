@@ -31,6 +31,8 @@ public:
     void ShowHandCards();
     //展示牌型
     void ShowType();
+    //最终展示
+    void FinalShow();
     //展示玩家名
     void ShowName();
     //获取玩家名

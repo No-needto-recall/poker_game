@@ -178,9 +178,7 @@ void Game::ShowHand(){
     Type tmp(_table.ReturnPublicCards());
     for(auto& rp:_players){
         if(rp.get()->IsAlive()){
-            cout<<rp.get()->GetName()<<" : ";
-            rp.get()->ShowType();
-            rp.get()->ShowHandCards();
+            rp.get()->FinalShow();
             if(rp.get()->_type>=tmp){
                 tmp=rp.get()->_type;
             }
@@ -206,9 +204,7 @@ void Game::GameSettle(){
     cout<<">>获胜玩家: "<<endl;
     for(auto&rp:_players){
         if(rp.get()->IsAlive()){
-            rp.get()->ShowName();
-            rp.get()->ShowType();
-            rp.get()->ShowHandCards();
+            rp.get()->FinalShow();
             rp.get()->_chips.GetChip(wintmp);
             _table._jackpot.UseChip(wintmp);
         }

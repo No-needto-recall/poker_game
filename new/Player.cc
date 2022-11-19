@@ -9,6 +9,34 @@ void Player::ShowName(){
 void Player::ShowHandCards(){
     _handcards.show();
 }
+//最终展示
+void Player::FinalShow(){
+    cout<<_name<<"   ";
+    TYPE::PrintType(_type.GetType());
+    cout<<endl;
+    for(auto &rc:_handcards.ReturnCards()){
+        CARD::PrintColour(rc.GetColour());
+        cout<<" ";
+    }
+    cout<<"   ";
+    for(auto &rc:_type.ReturnCards()){
+        CARD::PrintColour(rc.GetColour());
+        cout<<" ";
+    }
+    cout<<endl;
+    for (auto &rc : _handcards.ReturnCards())
+    {
+        CARD::PrintNum(rc.GetNum());
+        cout<<" ";
+    }
+    cout<<"   ";
+    for (auto &rc : _type.ReturnCards())
+    {
+        CARD::PrintNum(rc.GetNum());
+        cout<<" ";
+    }
+    cout<<endl<<endl;
+}
 
 //展示最大组合
 void Player::ShowType(){

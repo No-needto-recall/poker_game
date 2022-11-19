@@ -102,23 +102,27 @@ inline void PrintColour(const ColourType&);
 namespace CARD{
 
 inline void PrintColour(const ColourType&colour){
+        //\033[31m前景红色
+        //\033[30m前景黑色
+        //\033[47m背景白色
         if(colour==SUITS_SPADE){
-            cout<<"\033[34m♠\033[0m";
+            cout<<"\033[47m\033[30m♠ \033[0m";
         }else if(colour==SUITS_CLUBS){
-            cout<<"\033[31m♦\033[0m";
+            cout<<"\033[47m\033[31m♦ \033[0m";
         }else if(colour==SUITS_HEARTS){
-            cout<<"\033[31m♥\033[0m";
+            cout<<"\033[47m\033[31m♥ \033[0m";
         }else if(colour==SUITS_DIAMONDS){
-            cout<<"\033[34m♣\033[0m";
+            cout<<"\033[47m\033[30m♣ \033[0m";
         }
     }
 
 inline void PrintNum(const NumType&num){
-     if(num==NUM_J){cout<<"J";}
-    else if(num==NUM_Q){cout<<"Q";}
-    else if(num==NUM_K){cout<<"K";}
-    else if(num==NUM_A){cout<<"A";}
-    else {cout<<static_cast<int>(num);}
+     if(num==NUM_J){cout<<"\033[47m\033[30m J\033[0m";}
+    else if(num==NUM_Q){cout<<"\033[47m\033[30m Q\033[0m";}
+    else if(num==NUM_K){cout<<"\033[47m\033[30m K\033[0m";}
+    else if(num==NUM_A){cout<<"\033[47m\033[30m A\033[0m";}
+    else if(num==NUM_10){cout<<"\033[47m\033[30m10\033[0m";}
+    else {cout<<"\033[47m\033[30m "<<static_cast<int>(num)<<"\033[0m";}
 }    
 
 }//end of CARD
