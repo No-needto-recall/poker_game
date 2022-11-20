@@ -39,8 +39,9 @@ class Card
 {
     
 public:
-    Card(CardType n=0)
-    :_card(n)
+    Card():_card(0){}
+    Card(int x)
+    :_card(x)
     {}
 
     Card(NumType num,ColourType colour) 
