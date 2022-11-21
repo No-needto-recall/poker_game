@@ -25,6 +25,16 @@ class Level
 public:
     Level() {}
     ~Level() {}
+    void CreatMapRoyalFlush();
+    void CreatMapStraightFlush();
+    void CreatMapFourOfAKind();
+    void CreatMapFullHouse();
+    void CreatMapFlush();
+    void CreatMapStraight();
+    void CreatMapThreeOfAKind();
+    void CreatMapTwoPair();
+    void CreatMapOnePair();
+    void CreatMapHighCard();
     void CreatMap();
     void ImageMap();
 
