@@ -29,7 +29,7 @@ Cards LEVEL::StringToCards(string str){
 
 void Level::CreatMap(){
     int lv=1;
-#if 1
+#if 0
     lv=1;
     //对皇家同花顺
     for (int i = 0; i < 4; ++i)
@@ -50,7 +50,7 @@ void Level::CreatMap(){
     }
 #endif
 
-#if 1
+#if 0
     lv=2;
     //对同花顺；
     for(int i=0;i<4;++i){
@@ -72,7 +72,7 @@ void Level::CreatMap(){
         _cardsmap.insert({tmp,lv});
     }
 #endif
-#if 1
+#if 0
     // lv=2+9+1;
     lv=12;
     //四条
@@ -101,7 +101,7 @@ void Level::CreatMap(){
     }
 #endif
     
-#if 1
+#if 0
     // lv=2+9+1+12*13;
     lv=168;
     //葫芦
@@ -143,7 +143,7 @@ void Level::CreatMap(){
     }
 #endif
    
-#if 1
+#if 0
     // lv=2+10+156+156;
     lv=324;
     //同花
@@ -182,7 +182,7 @@ void Level::CreatMap(){
     }
 
 #endif
-#if 1
+#if 0
     // lv=324+1287-10;
     lv=1601;
     //顺子
@@ -242,12 +242,12 @@ void Level::CreatMap(){
         }
     }
 #endif
-#if 1
+#if 0
     // lv=1601+10;
     lv=1611;
     //三条YX1X2
-    for(int numY=12;numY>=0;--numY){//确定三张点数一样的牌的点数
-        int times1=0;
+    for(int numY=12;numY>=0;--numY)
+    {//确定三张点数一样的牌的点数
         for(int co1=0;co1<=4-3;++co1)
         {
             for(int co2=co1+1;co2<=4-3+1;++co2)
@@ -258,56 +258,152 @@ void Level::CreatMap(){
                     char card1=numY+co2*13;
                     char card2=numY+co3*13;
                     string tmpY({card0,card1,card2});//一组三张点数一样的牌
-                    for(int numX1=12;numX1>=0;--numX1)//X1的点数确定
+                    //从剩余的12中选两个点数出来
+                    for(int num1=12;num1>=1;--num1)
                     {
-                        if(numX1==numY){continue;}
-                        for(int coX1=0;coX1<4;++coX1)//X1的花色确定
+                        if(num1==numY){continue;}
+                        for(int num2=num1-1;num2>=0;--num2)
                         {
-                            char cardX1=numX1+coX1*13;
-                            int times2 = 0;
-                            string tmpX1({cardX1});//确认X1的卡牌
-                            for(int numX2=12;numX2>=0;--numX2)//x2的点数确定
+                            if(num2==numY){continue;}
+                            ++lv;
+                            for(int colour1=0;colour1<4;++colour1)
                             {
-                                if(numX1==numX2){continue;}
-                                ++lv;
-                                ++times2;    
-                                for(int coX2=0;coX2<4;++coX2)//X2的花色确定
+                                for(int colour2=0;colour2<4;++colour2)
                                 {
-                                    char cardX2=numX2+coX2*13;
-                                    string tmpX2({cardX2});//确定X2的卡牌
+                                    char cardX1=num1+colour1*13;
+                                    char cardX2=num2+colour2*13;
+                                    string tmpX1({cardX1});
+                                    string tmpX2({cardX2});
                                     string tmp;
-                                    if(numY<numX1&&numY<numX2)//说明numY在最左侧
-                                    {
-                                        tmp+=numY;
-                                        if(numX1<numX2){tmp+=numX1+numX2;}
-                                        else{tmp+=numX2+numX1;}
-                                    }
-                                    else if(numX1<numY&&numX1<numX2)
-                                    {
-                                        tmp+=numX1;
-                                        if(numY<numX2){tmp+=numY+numX2;}
-                                        else{tmp+=numX2+numY;}
-                                    }else if(numX2<numY&&numX2<numX1)
-                                    {
-                                        tmp+=numX2;
-                                        if(numY<numX1){tmp+=numY+numX1;}
-                                        else{tmp+=numX1+numY;}
-                                    }
-                                    if(_cardsmap.find(tmp)!=_cardsmap.end()){continue;}
-                                    else{_cardsmap.insert({tmp,lv});}
+                                    //隐含num2<num1;
+                                    if(numY<num2){tmp=tmpY+tmpX2+tmpX1;}
+                                    else if(numY<num1){tmp=tmpX2+tmpY+tmpX1;}
+                                    else{tmp=tmpX2+tmpX1+tmpY;}
+                                    _cardsmap.insert({tmp,lv});
                                 }
                             }
-                            lv -= times2; // X1的花色改变不会影响lv
                         }
-                        ++lv;
-                        ++times1;
                     }
-                    lv -= times1; // Y的花色改变不会影响Lv
+                    lv-=66;
                 }
             }
         }
+        lv+=66;
     }
 #endif
+#if 0
+    // lv=1611+66*13;
+    lv=2469;
+    //两对 从13种数号中选2种
+    for(int numY1=12;numY1>=1;--numY1)//大的对子
+    {
+        for(int numY2=numY1-1;numY2>=0;--numY2)//小的对子
+        {
+            for(int colour1=0;colour1<=4-2;++colour1)
+            {
+                for(int colour2=colour1+1;colour2<=4-2+1;++colour2)
+                {
+                    for(int colour3=0;colour3<=4-2;++colour3)
+                    {
+                        for(int colour4=colour3+1;colour4<=4-2+1;++colour4)
+                        {
+                            //确定两对每张牌的花色
+                            char card0=numY1+colour1*13;
+                            char card1=numY1+colour2*13;
+                            //隐含colour2>colour1
+                            string tmpY1({card0,card1});
+                            char card2=numY2+colour3*13;
+                            char card3=numY2+colour4*13;
+                            string tmpY2({card2,card3});
+                            for(int numX=12;numX>=0;--numX)
+                            {
+                                if(numX==numY1||numX==numY2){continue;}
+                                ++lv;
+                                for(int colour5=0;colour5<4;++colour5)
+                                {
+                                    char card4=numX+colour5*13;
+                                    string tmpX({card4});
+                                    //隐含numY1>numY2;
+                                    string tmp;
+                                    if(numX>numY1){tmp=tmpY2+tmpY1+tmpX;}
+                                    else if(numX>numY2){tmp=tmpY2+tmpX+tmpY1;}
+                                    else{tmp=tmpX+tmpY2+tmpY1;}
+                                    _cardsmap.insert({tmp,lv});
+                                }
+                            }
+                            lv -= 11;
+                        }
+                    }
+                }
+            }
+            lv+=11;
+        }
+    }
+#endif
+#if 1
+    // lv=2469+78*11;
+    lv=3327;
+    //一对 
+    for(int numY=12;numY>=0;--numY)//对子的数号
+    {
+        for(int colour1=0;colour1<=4-2;++colour1)
+        {
+            for(int colour2=colour1+1;colour2<=4-2+1;++colour2)
+            {
+                //确定对子的花色组合
+                char card0=numY+colour1*13;
+                char card1=numY+colour2*13;
+                string tmpY({card0,card1});
+                //从剩余的12中选出3个点数出来
+                for(int num1=12;num1>=2;--num1)
+                {
+                    for(int num2=num1-1;num2>=1;--num2)
+                    {
+                        for(int num3=num2-1;num3>=0;--num3)
+                        {
+                            if(num1==numY||num2==numY||num3==numY){continue;}
+                            ++lv;
+                            for(int colour3=0;colour3<4;++colour3)
+                            {
+                                for(int colour4=0;colour4<4;++colour4)
+                                {
+                                    for(int colour5=0;colour5<4;++colour5)
+                                    {
+                                        char card2=num1+colour3*13;
+                                        string tmpX1({card2});
+                                        char card3=num2+colour4*13;
+                                        string tmpX2({card3});
+                                        char card4=num3+colour5*13;
+                                        string  tmpX3({card4});
+                                        string tmp;
+                                        //隐含num3<num2<num1
+                                        if(numY<num3){tmp=tmpY+tmpX3+tmpX2+tmpX1;}
+                                        else if(numY<num2){tmp=tmpX3+tmpY+tmpX2+tmpX1;}
+                                        else if(numY<num1){tmp=tmpX3+tmpX2+tmpY+tmpX1;}
+                                        else {tmp=tmpX3+tmpX2+tmpX1+tmpY;}
+                                        _cardsmap.insert({tmp,lv});
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                lv-=220;
+            }
+        }
+        lv+=220;
+    }
+#endif
+#if 1
+    // lv=3327+220*13;
+    lv=6187;
+    //高牌
+    for(int numX1=12;numX1>=4;--numX1)
+    {
+        
+    }
+#endif
+
     cout<<"lv:"<<lv<<endl;
 }
 
@@ -321,6 +417,7 @@ void Level::ShowMap(){
             tmp.ReturnCards()=LEVEL::StringToCards(rv);
             GROUP_CARDS::PrintCards(tmp);
             cout<<endl;
+            break;
         }
         ++times;
         if(times=20){
