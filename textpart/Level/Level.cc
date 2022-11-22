@@ -1,8 +1,16 @@
 #include "Level.hpp"
 
-LevelType LEVEL::GetLevel(Cards keycards)
+LevelType Level::GetLevel(Cards keycards)
 {
-    return 0;
+    string ftmp=LEVEL::CardsToString(keycards);
+    auto ret=_cardsmap.find(ftmp);
+    if(ret==_cardsmap.end())
+    {
+        cerr<<"not find in map "<<endl;
+        exit(1);
+    }else{
+        return ret->second;
+    }
 }
 
 string LEVEL::CardsToString(Cards cards)
