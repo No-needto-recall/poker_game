@@ -4,6 +4,7 @@
 #include "GroupCards.hpp"
 #include <cstdlib>
 #include <cstdio>
+#include <ctime>
 #include <map>
 #include <unordered_map>
 #include <string>

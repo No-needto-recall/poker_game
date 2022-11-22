@@ -45,6 +45,7 @@ Cards LEVEL::StringToCards(string str)
 
 void Level::CreatMap()
 {
+    auto c_start=std::clock();
     CreatMapRoyalFlush();
     CreatMapStraightFlush();
     CreatMapFourOfAKind();
@@ -55,8 +56,9 @@ void Level::CreatMap()
     CreatMapTwoPair();
     CreatMapOnePair();
     CreatMapHighCard();
+    auto c_end=std::clock();
+    cout<<"time use :"<<1000*(c_end-c_start)/CLOCKS_PER_SEC<<" ms\n";
     cout<<"map.size:"<<_cardsmap.size()<<endl;
-    cout<<"map.Maxsize:"<<_cardsmap.max_size()<<endl;
 
 }
 void Level::CreatMapRoyalFlush()
@@ -604,20 +606,22 @@ void Level::LoadMapFromFile()
     if(!fp)
     {
         cerr<<"File opening failed in load"<<endl;
-        cerr<<"strat creat cardmap \n";
+        cerr<<"start creat cardmap \n";
         CreatMap();
-        cerr<<"strat creat levelmap.dat \n";
+        cerr<<"start creat levelmap.dat \n";
         WriteMapToFile();
         return;
     }
     
-    int times=0;
+    /* int times=0; */
+    char tmp[5]={0};
+    LevelType tmp2;
+    cout<<"start load levelmap.dat "<<endl;
+    auto c_start=std::clock();
     while(1){
         
-        char tmp[5]={0};
         auto ret=std::fread(&tmp,sizeof(tmp),1,fp);
         string stmp({tmp[0],tmp[1],tmp[2],tmp[3],tmp[4]});
-        LevelType tmp2;
         auto ret2=std::fread(&tmp2,sizeof(tmp2),1,fp);
         if(ret==0&&ret2==0)
         {
@@ -629,9 +633,11 @@ void Level::LoadMapFromFile()
             cerr<<"load map lose\n";
             exit(1);
         }
-        ++times;
+        /* ++times; */
         /* cout<<"\r"<<times; */
     }
+    auto c_end=std::clock();
+    cout<<"time use :"<<1000*(c_end-c_start)/CLOCKS_PER_SEC<<" ms\n";
     cout<<"map.size:"<<_cardsmap.size()<<endl;
     std::fclose(fp);
 
