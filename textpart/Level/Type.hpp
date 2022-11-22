@@ -19,23 +19,25 @@ enum TypeCards:TypeType{
 class Type;
 using Compare =function<bool(const Type &,const Type&)>;
 namespace GREADER{
-    bool KindCard(const Type&,const Type &);
+    /* bool KindCard(const Type&,const Type &); */
     // bool HighCard(const Type&,const Type &);
     // bool RoyalFlush(const Type&,const Type &);
 }//end of GREADER
 
 namespace EQUA{
-    bool Equa(const Type&,const Type &);
+    /* bool Equa(const Type&,const Type &); */
 }//end of EQUA
 
 namespace TYPE{
-    bool IsStraight(const Cards &cards);
-    bool IsRoyalFlush(const Cards &cards);
-    TypeType GetType(const Cards&cards5);
+    /* bool IsStraight(const Cards &cards); */
+    /* bool IsRoyalFlush(const Cards &cards); */
+    /* TypeType GetType(const Cards&cards5); */
+    LevelType GetLevelFromMap(const Cards&card5);
     void PrintType(TypeType type);
 
     // Compare SetGreadter(const TypeType type);
     Type GainType(Cards cards);
+    LevelType GainLevel(Cards cards);
     //根据公共牌返回对应的插入Cards排序
     void SwapCards(const Cards& pubcards,Cards& target);
     //查找contrust是否在pubcards中，如果是返回pos，不是返回-1；
@@ -54,25 +56,25 @@ public:
     Type()
     :GroupCards(5)
     // ,_greadter(nullptr)
-    ,_type(0)
+    ,_level(0)
     {}
     Type(Cards cards5);
     Type(const Type &rhs)
         : GroupCards(5)
         // , _greadter(rhs._greadter)
-        , _type(rhs._type)
+        , _level(rhs._level)
     {_cards = rhs._cards;}
     Type(Type &&rhs)
         : GroupCards(5)
         // , _greadter(rhs._greadter)
-        , _type(rhs._type)
+        , _level(rhs._level)
     {_cards=rhs._cards;}
 
     Type &operator=(const Type &rhs){
         if(this!=&rhs){
             this->_cards = rhs._cards;
             // this->_greadter=rhs._greadter;
-            this->_type=rhs._type;
+            this->_level=rhs._level;
         }
         return *this;
    }
@@ -82,7 +84,7 @@ public:
        {
            this->_cards = rhs._cards;
         //    this->_greadter = rhs._greadter;
-           this->_type = rhs._type;
+           this->_level= rhs._level;
        }
        return *this;
    }
@@ -98,26 +100,27 @@ public:
     void Show()const;
     void ResetType(){
         // _greadter=nullptr;
-        _type=0;
+        _level=0;
         _cards.clear();
     }
     void SetCards(Cards cards);
     void SetType(TypeType type);
     // void SetGreadter(){_greadter=TYPE::SetGreadter(_type);}
-    TypeType GetType(){return LevelToType(_level);}
-    LevelType GetLevelFromMap(const Cards);
-    TypeType LevelToType(const LevelType);
+    TypeType GetType()const{return LevelToType(_level);}
+    TypeType LevelToType(const LevelType)const;
 private:
     // Compare _greadter;
     LevelType _level;
 };
 
 
+#if 0
 //设置_type并获取对应的比较函数
 inline void Type::SetType(TypeType type){
     _type=type;
     // SetGreadter();
 }
+#endif
 
 
 #endif

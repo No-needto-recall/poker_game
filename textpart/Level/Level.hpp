@@ -2,6 +2,7 @@
 #define _CTL_LEVEL_HPP_
 
 #include "GroupCards.hpp"
+#include <cstdlib>
 #include <map>
 #include <unordered_map>
 #include <string>
@@ -26,8 +27,21 @@ namespace LEVEL{
 class Level
 {
 public:
-    Level() {}
-    ~Level() {}
+    static Level* GetPlevel()
+    {
+        if(_plevel==nullptr)
+        {
+            atexit(Destroy);
+            _plevel=new Level();
+        }
+        return _plevel;
+    }
+    static void Destroy(){
+        if(_plevel){
+            delete _plevel;
+            _plevel=nullptr;
+        }
+    }
     void CreatMapRoyalFlush();//1-2
     void CreatMapStraightFlush();//3-12
     void CreatMapFourOfAKind();//13-168
@@ -43,11 +57,23 @@ public:
 
     void ShowMap();
     LevelType GetLevel(const Cards keycards);
+    //删除赋值语句，拷贝构造、赋值运算符
+    Level(const Level &rhs) = delete;
+    Level &operator=(const Level &rhs) = delete;
+
 private:
+    //构造函数私有化
+    Level() {}
+    //析构私有化
+    ~Level() {}
     unordered_map<string,LevelType> _cardsmap;
     map<LevelType,vector<string> > _imagemap;
-
+    //定义一个该类型的静态指针
+    static Level* _plevel;
 };
+
+//初始化静态成员
+Level* Level::_plevel=GetPlevel();//饿汉模式，开始就初始化
 
 #endif
 

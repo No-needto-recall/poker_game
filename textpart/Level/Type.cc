@@ -2,7 +2,7 @@
 
 Type::Type(Cards cards5)
 :GroupCards(5)
-,_type(TYPE::GetType(cards5))
+,_level(TYPE::GetLevelFromMap(cards5))
 // ,_greadter(TYPE::SetGreadter(_type))
 {
     _cards=cards5;
@@ -15,18 +15,24 @@ void Type::SetCards(Cards cards){
         return;
     }
     _cards=cards;
-    SetType(TYPE::GetType(_cards));
+    SetType(TYPE::GetLevelFromMap(_cards));
 }
 
 void Type::Show()const{
-    if(_type==0){
+    if(GetType()==0){
         cerr<<"Type::Show()const _type==0 \n";
         return;
     }
-    TYPE::PrintType(_type);
+    TYPE::PrintType(GetType());
     cout<<endl;
     GROUP_CARDS::PrintCards(*this, 1, 5);
 }
+//根据5张牌，判断LV
+LevelType TYPE::GetLevelFromMap(const Cards&cards5)
+{
+    return Level::GetPlevel()->GetLevel(cards5);
+}
+#if 0
 //根据5张牌，判断牌力
 TypeType TYPE::GetType(const Cards&cards5){
     //暂存,排序
@@ -71,8 +77,8 @@ TypeType TYPE::GetType(const Cards&cards5){
 
     return  typeTmp;
 }
-
-
+#endif
+#if 0
 bool TYPE::IsStraight(const Cards &cards){
     
     if(cards[0].GetNum()+4==cards[4].GetNum()){
@@ -91,7 +97,7 @@ bool TYPE::IsRoyalFlush(const Cards &cards){
     }
     return false;
 }
-
+#endif
 void TYPE::PrintType(TypeType type){
      if(type==HIGH_CARD){cout<<"高牌 (High Card)";}
     else if(type==ONE_PAIR){cout<<"一对 (One Pair)";}
@@ -118,7 +124,7 @@ Compare TYPE::SetGreadter(const TypeType type){
     else {return GREADER::KindCard;}
 }
 #endif
-
+#if 0
 bool Type::operator>(const Type&rhs)const{
     if(this->_type==rhs._type){return GREADER::KindCard(*this,rhs);}
     return this->_type>rhs._type;
@@ -142,6 +148,48 @@ bool Type::operator>=(const Type&rhs)const{
 bool Type::operator<=(const Type&rhs)const{
     return !(*this>rhs);
 }
+#endif
+bool Type::operator>(const Type&rhs)const{
+    return this->_level<rhs._level;
+}
+bool Type::operator<(const Type&rhs)const{
+    return this->_level>rhs._level;
+}
+
+bool Type::operator==(const Type&rhs)const{
+    return this->_level==rhs._level;
+}
+
+bool Type::operator!=(const Type&rhs)const{
+    return this->_level!=rhs._level;
+}
+
+bool Type::operator>=(const Type&rhs)const{
+    return rhs._level>=this->_level;
+}
+bool Type::operator<=(const Type&rhs)const{
+    return rhs._level<=this->_level;
+}
+
+TypeType Type::LevelToType(const LevelType lv)const{
+    if(lv<1){
+        cerr<<"error lv:"<<lv<<endl;
+        exit(1);}
+    else if(lv<=2){return ROYAL_FLUSH;}
+    else if(lv<=12){return STRAIGHT_FLUSH;}
+    else if(lv<=168){return FOUR_OF_A_KIND;}
+    else if(lv<=324){return FULL_HOUSE;}
+    else if(lv<=1601){return FLUSH;}
+    else if(lv<=1611){return STRAIGHT;}
+    else if(lv<=2469){return THREE_OF_A_KIND;}
+    else if(lv<=3327){return TWO_PAIRS;}
+    else if(lv<=6187){return ONE_PAIR;}
+    else if(lv<=7464){return HIGH_CARD;}
+    else{
+        cerr<<"error lv:"<<lv<<endl;
+        exit(1);
+    }
+}
 
 #if 0
 bool GREADER::HighCard(const Type & Left,const Type & Right){
@@ -157,7 +205,7 @@ bool GREADER::HighCard(const Type & Left,const Type & Right){
     return false;
 }
 #endif
-
+#if 0
 bool GREADER::KindCard(const Type & Left,const Type & Right){
     map<NumType,int,std::greater<NumType> > numLMap;
     map<NumType,int,std::greater<NumType> > numRMap;
@@ -224,6 +272,7 @@ bool GREADER::KindCard(const Type & Left,const Type & Right){
         return false;
     }
 }
+#endif
 #if 0
 bool GREADER::RoyalFlush(const Type & Left,const Type & Right){
     auto Cleft=Left.ReturnCards();
@@ -231,7 +280,7 @@ bool GREADER::RoyalFlush(const Type & Left,const Type & Right){
     return Cleft[0].GetNum()>Right.GetNums();
 }
 #endif
-
+#if 0
 bool EQUA::Equa(const Type & Left,const Type & Right){
     auto Cleft=Left.ReturnCards();
     auto Cright=Right.ReturnCards();
@@ -242,6 +291,7 @@ bool EQUA::Equa(const Type & Left,const Type & Right){
     }
     return true;
 }
+#endif
 
 Type TYPE::GainType(Cards cards){
     int Cnum=cards.size();
