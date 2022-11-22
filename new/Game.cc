@@ -231,6 +231,7 @@ void Game::GameOver(){
         rp.get()->_type.ResetType();
         rp.get()->SetCallOut();
         rp.get()->SetPlayerIn();
+        rp.get()->ResetPlayerChipsBet();
     }
     _alivenum=_playersnum;
     ++_dealerpos;

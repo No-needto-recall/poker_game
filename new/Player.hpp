@@ -58,6 +58,8 @@ public:
     bool IsCall(){return _call;}
     //下盲注
     void PlayerBlindBet(Table&);
+    //将玩家的下注清空
+    void ResetPlayerChipsBet(){_chips.CleanBet();}
 protected:
     string _name;
     HandCards _handcards;
