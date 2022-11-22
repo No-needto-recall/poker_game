@@ -59,7 +59,7 @@ public:
     void CreatMapHighCard();//6188-7464
     void CreatMap();
     void ImageMap();
-
+    void LoadMapFromFile();
     void ShowMap();
     LevelType GetLevel(const Cards keycards);
     //删除赋值语句，拷贝构造、赋值运算符

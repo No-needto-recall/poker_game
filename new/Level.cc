@@ -594,3 +594,8 @@ void Level::ImageMap()
         _imagemap[rm.second].push_back(rm.first);
     }
 }
+
+void Level::LoadMapFromFile()
+{
+
+}
