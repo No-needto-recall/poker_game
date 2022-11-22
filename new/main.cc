@@ -16,8 +16,8 @@ int main(int argc, char const *argv[])
     /* Level::GetPlevel()->ImageMap(); */
     /* Level::GetPlevel()->ShowMap(); */
 #endif
-     /* Game game(std::stoi(argv[1])); */
-     /* game.GameStart(); */
+     Game game(std::stoi(argv[1]));
+     game.GameStart();
     return 0;
 }
 
