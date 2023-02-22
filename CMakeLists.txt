@@ -17,5 +17,5 @@ include_directories(./include)
 
 aux_source_directory(./src src)
 
-add_executable(server.out ${src})
+add_executable(Game.out ${src})
 

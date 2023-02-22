@@ -602,7 +602,7 @@ void Level::ImageMap()
 
 void Level::LoadMapFromFile()
 {
-    FILE* fp=std::fopen("levelmap.dat","rb");
+    FILE* fp=std::fopen("../data/levelmap.dat","rb");
     if(!fp)
     {
         cerr<<"File opening failed in load"<<endl;
@@ -644,7 +644,7 @@ void Level::LoadMapFromFile()
 }
 
 void Level::WriteMapToFile(){
-    FILE* fp=std::fopen("levelmap.dat","wb");
+    FILE* fp=std::fopen("../data/levelmap.dat","wb");
     if(!fp)
     {
         cerr<<"File opening failed in write"<<endl;
