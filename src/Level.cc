@@ -2,11 +2,15 @@
 
 LevelType Level::GetLevel(Cards keycards)
 {
+    GROUP_CARDS::SortCardsNum(keycards);
     string ftmp=LEVEL::CardsToString(keycards);
     auto ret=_cardsmap.find(ftmp);
     if(ret==_cardsmap.end())
     {
         cerr<<"not find in map "<<endl;
+        GroupCards tmp(5);
+        tmp.ReturnCards()=keycards;
+        GROUP_CARDS::PrintCards(tmp);
         exit(1);
     }else{
         return ret->second;
@@ -41,6 +45,7 @@ Cards LEVEL::StringToCards(string str)
 
 void Level::CreatMap()
 {
+    auto c_start=std::clock();
     CreatMapRoyalFlush();
     CreatMapStraightFlush();
     CreatMapFourOfAKind();
@@ -51,6 +56,10 @@ void Level::CreatMap()
     CreatMapTwoPair();
     CreatMapOnePair();
     CreatMapHighCard();
+    auto c_end=std::clock();
+    cout<<"time use :"<<1000*(c_end-c_start)/CLOCKS_PER_SEC<<" ms\n";
+    cout<<"map.size:"<<_cardsmap.size()<<endl;
+
 }
 void Level::CreatMapRoyalFlush()
 {
@@ -576,9 +585,9 @@ void Level::ShowMap()
             break;
         }
         ++times;
-        if (times = 20)
+        if (times == 100)
         {
-            // cin>>times;
+             cin>>times;
         }
     }
 }
@@ -589,4 +598,68 @@ void Level::ImageMap()
     {
         _imagemap[rm.second].push_back(rm.first);
     }
+}
+
+void Level::LoadMapFromFile()
+{
+    FILE* fp=std::fopen("../data/levelmap.dat","rb");
+    if(!fp)
+    {
+        cerr<<"File opening failed in load"<<endl;
+        cerr<<"start creat cardmap \n";
+        CreatMap();
+        cerr<<"start creat levelmap.dat \n";
+        WriteMapToFile();
+        return;
+    }
+    
+    /* int times=0; */
+    char tmp[5]={0};
+    LevelType tmp2;
+    cout<<"start load levelmap.dat "<<endl;
+    auto c_start=std::clock();
+    while(1){
+        
+        auto ret=std::fread(&tmp,sizeof(tmp),1,fp);
+        string stmp({tmp[0],tmp[1],tmp[2],tmp[3],tmp[4]});
+        auto ret2=std::fread(&tmp2,sizeof(tmp2),1,fp);
+        if(ret==0&&ret2==0)
+        {
+            /* cout<<endl; */
+            break;
+        }
+        auto retm=_cardsmap.insert({stmp,tmp2}).second;
+        if(!retm){
+            cerr<<"load map lose\n";
+            exit(1);
+        }
+        /* ++times; */
+        /* cout<<"\r"<<times; */
+    }
+    auto c_end=std::clock();
+    cout<<"time use :"<<1000*(c_end-c_start)/CLOCKS_PER_SEC<<" ms\n";
+    cout<<"map.size:"<<_cardsmap.size()<<endl;
+    std::fclose(fp);
+
+}
+
+void Level::WriteMapToFile(){
+    FILE* fp=std::fopen("../data/levelmap.dat","wb");
+    if(!fp)
+    {
+        cerr<<"File opening failed in write"<<endl;
+        exit(1);
+    }
+
+    int times=0;
+    for(auto &rm:_cardsmap)
+    {
+        std::fwrite(rm.first.c_str(),rm.first.size(),1,fp);
+        std::fwrite(&rm.second,sizeof(rm.second),1,fp);
+       ++times; 
+       cout<<"\r"<<times;
+    }
+    cout<<endl;
+    std::fclose(fp);
+    
 }
