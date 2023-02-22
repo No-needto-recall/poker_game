@@ -19,7 +19,7 @@ namespace GAME{
 class Game
 {
 public:
-    Game(int playsnum=3,int smallblind=10)//默认玩家三人，小盲注10
+    Game(int playsnum=3,int smallblind=10)
     :_players()
     ,_table(smallblind)
     ,_playersnum(playsnum)
@@ -30,12 +30,12 @@ public:
     void GameStart();
 
 protected:
-    void CreatPlayers();//创建玩家
-    void SetAllPlayerType();//设置所有玩家的牌力
-    bool CircleOfPreflop();//发牌圈
-    bool CircleOfFlop();//翻牌圈
-    bool CircleOfTurn();//转牌圈
-    bool CircleOfRiver();//河牌圈
+    void CreatPlayers();
+    void SetAllPlayerType();
+    bool CircleOfPreflop();
+    bool CircleOfFlop();
+    bool CircleOfTurn();
+    bool CircleOfRiver();
     void ShowHand();
     void GameSettle();
     void GameOver();

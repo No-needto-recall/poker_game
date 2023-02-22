@@ -31,7 +31,4 @@ inline void HandCards::AutoGet(){
     _cards.push_back((*_deck).SendCard());
 }
 
-
-
-
 #endif

@@ -1,7 +1,14 @@
 #ifndef _CTL_LEVEL_HPP_
 #define _CTL_LEVEL_HPP_
 
+#include "HashMap.hpp"
 #include "GroupCards.hpp"
+#include <string.h>
+#include <sys/mman.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <fcntl.h>
 #include <cstdlib>
 #include <cstdio>
 #include <ctime>
@@ -24,8 +31,17 @@ namespace LEVEL{
 }//end of LEVEL
 
 enum LevelNum:LevelType{
-    LV_MIN=1,
-    LV_MAX=7464
+    LV_ROYAL_FLUSH=1,
+    LV_STRAIGHT_FLUSH=2,
+    LV_FOUR_OF_A_KIND=11,
+    LV_FULL_HOUSE=167,
+    LV_FLUSH=323,
+    LV_STRAIGHT=1600,
+    LV_THREE_OF_A_KIND=1610,
+    LV_TWO_PAIR=2468,
+    LV_ONE_PAIR=3326,
+    LV_HIGH_CARD=6186,
+    LV_MAX=7463
 };
 
 
@@ -49,21 +65,22 @@ public:
             _plevel=nullptr;
         }
     }
-    void CreatMapRoyalFlush();//1-2
-    void CreatMapStraightFlush();//3-12
-    void CreatMapFourOfAKind();//13-168
-    void CreatMapFullHouse();//169-324
-    void CreatMapFlush();//325-1601
-    void CreatMapStraight();//1602-1611
-    void CreatMapThreeOfAKind();//1612-2469
-    void CreatMapTwoPair();//2470-3327
-    void CreatMapOnePair();//3328-6187
-    void CreatMapHighCard();//6188-7464
+    void CreatMapRoyalFlush();//1-1
+    void CreatMapStraightFlush();//2-10
+    void CreatMapFourOfAKind();//11-166
+    void CreatMapFullHouse();//167-322
+    void CreatMapFlush();//323-1599
+    void CreatMapStraight();//1600-1609
+    void CreatMapThreeOfAKind();//1610-2467
+    void CreatMapTwoPair();//2468-3325
+    void CreatMapOnePair();//3326-6185
+    void CreatMapHighCard();//6186-7462
     void CreatMap();
     void ImageMap();
     void LoadMapFromFile();
     void WriteMapToFile();
     void ShowMap();
+    bool Full();
     LevelType GetLevel(const Cards keycards);
     //删除赋值语句，拷贝构造、赋值运算符
     Level(const Level &rhs) = delete;
@@ -71,14 +88,18 @@ public:
 
 private:
     //构造函数私有化
-    Level() {}
+    Level() 
+    :_HashMap(MathFunc::Group_M_To_K(52,5))
+    {
+        cout<<"size"<<_HashMap._valmap.size()<<endl;
+    }
     //析构私有化
     ~Level() {}
-    unordered_map<string,LevelType> _cardsmap;
-    map<LevelType,vector<string> > _imagemap;
+    HashMap _HashMap;
     //定义一个该类型的静态指针
     static Level* _plevel;
 };
+
 
 //初始化静态成员
 // Level* Level::_plevel=GetPlevel();//饿汉模式，开始就初始化
