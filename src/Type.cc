@@ -172,19 +172,19 @@ bool Type::operator<=(const Type&rhs)const{
 }
 
 TypeType Type::LevelToType(const LevelType lv)const{
-    if(lv<1){
+    if(lv<LV_ROYAL_FLUSH){
         cerr<<"error lv:"<<lv<<endl;
         exit(1);}
-    else if(lv<=2){return ROYAL_FLUSH;}
-    else if(lv<=12){return STRAIGHT_FLUSH;}
-    else if(lv<=168){return FOUR_OF_A_KIND;}
-    else if(lv<=324){return FULL_HOUSE;}
-    else if(lv<=1601){return FLUSH;}
-    else if(lv<=1611){return STRAIGHT;}
-    else if(lv<=2469){return THREE_OF_A_KIND;}
-    else if(lv<=3327){return TWO_PAIRS;}
-    else if(lv<=6187){return ONE_PAIR;}
-    else if(lv<=7464){return HIGH_CARD;}
+    else if(lv<LV_STRAIGHT_FLUSH){return ROYAL_FLUSH;}
+    else if(lv<LV_FOUR_OF_A_KIND){return STRAIGHT_FLUSH;}
+    else if(lv<LV_FULL_HOUSE){return FOUR_OF_A_KIND;}
+    else if(lv<LV_FLUSH){return FULL_HOUSE;}
+    else if(lv<LV_STRAIGHT){return FLUSH;}
+    else if(lv<LV_THREE_OF_A_KIND){return STRAIGHT;}
+    else if(lv<LV_TWO_PAIR){return THREE_OF_A_KIND;}
+    else if(lv<LV_ONE_PAIR){return TWO_PAIRS;}
+    else if(lv<LV_HIGH_CARD){return ONE_PAIR;}
+    else if(lv<LV_MAX){return HIGH_CARD;}
     else{
         cerr<<"error lv:"<<lv<<endl;
         exit(1);

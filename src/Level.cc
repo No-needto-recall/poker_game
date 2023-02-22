@@ -4,6 +4,8 @@ LevelType Level::GetLevel(Cards keycards)
 {
     GROUP_CARDS::SortCardsNum(keycards);
     string ftmp=LEVEL::CardsToString(keycards);
+    return _HashMap.Find(&ftmp[0]);
+#if 0
     auto ret=_cardsmap.find(ftmp);
     if(ret==_cardsmap.end())
     {
@@ -15,6 +17,7 @@ LevelType Level::GetLevel(Cards keycards)
     }else{
         return ret->second;
     }
+#endif
 }
 
 string LEVEL::CardsToString(Cards cards)
@@ -43,6 +46,10 @@ Cards LEVEL::StringToCards(string str)
     return tmp;
 }
 
+bool Level::Full(){
+    return _HashMap.Full();
+}
+
 void Level::CreatMap()
 {
     auto c_start=std::clock();
@@ -58,7 +65,7 @@ void Level::CreatMap()
     CreatMapHighCard();
     auto c_end=std::clock();
     cout<<"time use :"<<1000*(c_end-c_start)/CLOCKS_PER_SEC<<" ms\n";
-    cout<<"map.size:"<<_cardsmap.size()<<endl;
+    /* cout<<"map.size:"<<_cardsmap.size()<<endl; */
 
 }
 void Level::CreatMapRoyalFlush()
@@ -66,53 +73,65 @@ void Level::CreatMapRoyalFlush()
     int lv = 1;
     lv = 1;
     //对皇家同花顺
-    for (int i = 0; i < 4; ++i)
+    //只有一种等级
+    CardsKeyVal CKInsert;
+    for (char i = 0; i < 4; ++i)
     {
-        char ch0 = i * 13 + 0;  // 2
-        char ch1 = i * 13 + 1;  // 3
-        char ch2 = i * 13 + 2;  // 4
-        char ch3 = i * 13 + 3;  // 5
-        char ch4 = i * 13 + 12; // A
-        char ch5 = i * 13 + 8;  // 10
-        char ch6 = i * 13 + 9;  // J
-        char ch7 = i * 13 + 10; // Q
-        char ch8 = i * 13 + 11; // K
-        string tmp({ch5, ch6, ch7, ch8, ch4});
-        _cardsmap.insert({tmp, lv});
-        string tmp2({ch0, ch1, ch2, ch3, ch4});
-        _cardsmap.insert({tmp2, lv + 1});
+        CKInsert._num4 = i * 13 + 12; // A
+        CKInsert._num3 = i * 13 + 8;  // 10
+        CKInsert._num2 = i * 13 + 9;  // J
+        CKInsert._num1 = i * 13 + 10; // Q
+        CKInsert._num0 = i * 13 + 11; // K
+        CKInsert._val=lv;
+        _HashMap.Insert(CKInsert);
     }
 }
 void Level::CreatMapStraightFlush()
 {
-    int lv = 2;
+    int lv = 1;
     //对同花顺；
+    CardsKeyVal CKInsert;
     for (int i = 0; i < 4; ++i)
     {
         char colour = i * 13;
-        for (int j = 12; j >= 4; --j)
+        //8种同花顺子
+        //顶顺为皇家同花顺
+        for (int j = 11; j >= 4; --j)
         {
             char numS = j;
-            char card0 = colour + numS, card1 = card0 - 4, card2 = card0 - 3, card3 = card0 - 2, card4 = card0 - 1;
-            string tmp({card1, card2, card3, card4, card0});
-            _cardsmap.insert({tmp, ++lv});
+            char card0 = colour + numS, card1 = card0 - 4,
+                 card2 = card0 - 3, card3 = card0 - 2, card4 = card0 - 1;
+            CKInsert._num0=card1;
+            CKInsert._num1=card2;
+            CKInsert._num2=card3;
+            CKInsert._num3=card4;
+            CKInsert._num4=card0;
+            CKInsert._val=++lv;
+            _HashMap.Insert(CKInsert);
         }
-        lv = 2;
+        lv = 1;
     }
-    lv = 2 + 9;
+    lv = 1 + 8;
     for (int i = 0; i < 4; ++i)
     {
         char colour = i * 13;
         char card = colour + 0, card1 = colour + 1, card2 = colour + 2, card3 = colour + 3;
         char cardA = colour + 12;
-        string tmp({card, card1, card2, card3, cardA});
-        _cardsmap.insert({tmp, lv});
+        //最小的同花顺
+        CKInsert._num0 = card;
+        CKInsert._num1 = card1;
+        CKInsert._num2 = card2;
+        CKInsert._num3 = card3;
+        CKInsert._num4 = cardA;
+        CKInsert._val = lv;
+        _HashMap.Insert(CKInsert);
     }
 }
 void Level::CreatMapFourOfAKind()
 {
-    // lv=2+9+1;
-    int lv = 12;
+    // lv=1+8+1;
+    int lv = 10;
+    CardsKeyVal CKInsert;
     //四条
     for (int i = 12; i >= 0; --i)
     {
@@ -128,21 +147,18 @@ void Level::CreatMapFourOfAKind()
             char colour = j;
             for (int k = 12; k >= 0; --k)
             {
-                if (k == i)
-                {
-                    continue;
-                }
+                if (k == i){continue;}
                 char card = colour * 13 + k;
                 string use;
-                if (i > k)
-                {
-                    use = card + tmp;
-                }
-                else
-                {
-                    use = tmp + card;
-                }
-                _cardsmap.insert({use, ++lv});
+                if (i > k){use = card + tmp;}
+                else{use = tmp + card;}
+                CKInsert._num0 = use[0];
+                CKInsert._num1 = use[1];
+                CKInsert._num2 = use[2];
+                CKInsert._num3 = use[3];
+                CKInsert._num4 = use[4];
+                CKInsert._val = ++lv;
+                _HashMap.Insert(CKInsert);
             }
             lv -= 12;
         }
@@ -151,8 +167,9 @@ void Level::CreatMapFourOfAKind()
 }
 void Level::CreatMapFullHouse()
 {
-    // lv=2+9+1+12*13;
-    int lv = 168;
+    // lv=1+8+1+12*13;
+    int lv = 166;
+    CardsKeyVal CKInsert;
     //葫芦
     char colourarr[4] = {0, 13, 26, 39};
     for (int i = 12; i >= 0; --i)
@@ -182,12 +199,16 @@ void Level::CreatMapFullHouse()
                                 if (k > i)
                                 {
                                     string use({num1, num2, num3, num4, num5});
-                                    _cardsmap.insert({use, ++lv});
+                                    MathFunc::StringCopyToCardsKeyVal(use,CKInsert);
+                                    CKInsert._val=++lv;
+                                    _HashMap.Insert(CKInsert);
                                 }
                                 else
                                 {
                                     string use({num4, num5, num1, num2, num3});
-                                    _cardsmap.insert({use, ++lv});
+                                    MathFunc::StringCopyToCardsKeyVal(use,CKInsert);
+                                    CKInsert._val=++lv;
+                                    _HashMap.Insert(CKInsert);
                                 }
                             }
                             lv -= 12;
@@ -201,8 +222,9 @@ void Level::CreatMapFullHouse()
 }
 void Level::CreatMapFlush()
 {
-    // lv=2+10+156+156;
-    int lv = 324;
+    // lv=10+156+156;
+    int lv = 322;
+    CardsKeyVal CKInsert;
     //同花
     for (int co = 0; co < 4; ++co)
     {
@@ -218,6 +240,7 @@ void Level::CreatMapFlush()
                     {
                         for (int n5 = n4 - 1; n5 >= 0; --n5)
                         {
+                            //不能是顺子
                             if (n5 + 1 == n4 && n4 + 1 == n3 && n3 + 1 == n2 && n2 + 1 == n1)
                             {
                                 continue;
@@ -234,7 +257,9 @@ void Level::CreatMapFlush()
                             //隐含n1>n2>n3>n4>n5;
                             string tmp({card0, card1, card2, card3, card4});
                             // tmp需要排除顺子的可能
-                            _cardsmap.insert({tmp, ++lv});
+                            MathFunc::StringCopyToCardsKeyVal(tmp,CKInsert);
+                            CKInsert._val=++lv; 
+                            _HashMap.Insert(CKInsert);
                             ++timetmp;
                         }
                     }
@@ -246,8 +271,9 @@ void Level::CreatMapFlush()
 }
 void Level::CreatMapStraight()
 {
-    // lv=324+1287-10;
-    int lv = 1601;
+    // lv=322+1287-10;
+    int lv = 1599;
+    CardsKeyVal CKInsert;
     //顺子
     for (int num4 = 12; num4 >= 4; --num4)
     {
@@ -266,6 +292,7 @@ void Level::CreatMapStraight()
                         char card1 = num4 - 3 + colour1 * 13; //第二张牌
                         for (int colour0 = 0; colour0 < 4; ++colour0)
                         {
+                            //排除同花
                             if (colour0 == colour1 && colour1 == colour2 &&
                                 colour2 == colour3 && colour3 == colour4)
                             {
@@ -273,7 +300,9 @@ void Level::CreatMapStraight()
                             }
                             char card0 = num4 - 4 + colour0 * 13;
                             string tmp({card0, card1, card2, card3, card4});
-                            _cardsmap.insert({tmp, lv});
+                            MathFunc::StringCopyToCardsKeyVal(tmp,CKInsert);
+                            CKInsert._val=lv;
+                            _HashMap.Insert(CKInsert);
                         }
                     }
                 }
@@ -295,6 +324,7 @@ void Level::CreatMapStraight()
                     char card1 = 1 + colour1 * 13; //第二张牌 3
                     for (int colour0 = 0; colour0 < 4; ++colour0)
                     {
+                        //排除同花
                         if (colour0 == colour1 && colour1 == colour2 &&
                             colour2 == colour3 && colour3 == colour4)
                         {
@@ -302,7 +332,9 @@ void Level::CreatMapStraight()
                         }
                         char card0 = 0 + colour0 * 13; //第一张牌 2
                         string tmp({card0, card1, card2, card3, card4});
-                        _cardsmap.insert({tmp, lv});
+                        MathFunc::StringCopyToCardsKeyVal(tmp,CKInsert);
+                        CKInsert._val=lv;
+                        _HashMap.Insert(CKInsert);
                     }
                 }
             }
@@ -311,8 +343,9 @@ void Level::CreatMapStraight()
 }
 void Level::CreatMapThreeOfAKind()
 {
-    // lv=1601+10;
-    int lv = 1611;
+    // lv=1599+10;
+    int lv = 1609;
+    CardsKeyVal CKInsert;
     //三条YX1X2
     for (int numY = 12; numY >= 0; --numY)
     { //确定三张点数一样的牌的点数
@@ -362,7 +395,9 @@ void Level::CreatMapThreeOfAKind()
                                     {
                                         tmp = tmpX2 + tmpX1 + tmpY;
                                     }
-                                    _cardsmap.insert({tmp, lv});
+                                    MathFunc::StringCopyToCardsKeyVal(tmp,CKInsert);
+                                    CKInsert._val=lv;
+                                    _HashMap.Insert(CKInsert);
                                 }
                             }
                         }
@@ -376,8 +411,9 @@ void Level::CreatMapThreeOfAKind()
 }
 void Level::CreatMapTwoPair()
 {
-    // lv=1611+66*13;
-    int lv = 2469;
+    // lv=1609+66*13;
+    int lv = 2467;
+    CardsKeyVal CKInsert;
     //两对 从13种数号中选2种
     for (int numY1 = 12; numY1 >= 1; --numY1) //大的对子
     {
@@ -424,7 +460,9 @@ void Level::CreatMapTwoPair()
                                     {
                                         tmp = tmpX + tmpY2 + tmpY1;
                                     }
-                                    _cardsmap.insert({tmp, lv});
+                                    MathFunc::StringCopyToCardsKeyVal(tmp,CKInsert);
+                                    CKInsert._val=lv;
+                                    _HashMap.Insert(CKInsert);
                                 }
                             }
                             lv -= 11;
@@ -438,8 +476,9 @@ void Level::CreatMapTwoPair()
 }
 void Level::CreatMapOnePair()
 {
-    // lv=2469+78*11;
-    int lv = 3327;
+    // lv=2467+78*11;
+    int lv = 3325;
+    CardsKeyVal CKInsert;
     //一对
     for (int numY = 12; numY >= 0; --numY) //对子的数号
     {
@@ -493,7 +532,9 @@ void Level::CreatMapOnePair()
                                         {
                                             tmp = tmpX3 + tmpX2 + tmpX1 + tmpY;
                                         }
-                                        _cardsmap.insert({tmp, lv});
+                                        MathFunc::StringCopyToCardsKeyVal(tmp,CKInsert);
+                                        CKInsert._val=lv;
+                                        _HashMap.Insert(CKInsert);
                                     }
                                 }
                             }
@@ -508,8 +549,9 @@ void Level::CreatMapOnePair()
 }
 void Level::CreatMapHighCard()
 {
-    // lv=3327+220*13;
-    int lv = 6187;
+    // lv=3325+220*13;
+    int lv = 6185;
+    CardsKeyVal CKInsert;
     //高牌
     int times = 0;
     for (int numX1 = 12; numX1 >= 4; --numX1)
@@ -556,7 +598,9 @@ void Level::CreatMapHighCard()
                                             char card4 = numX5 + colour5 * 13;
                                             //隐含numX5<numX4<numX3<numX2<numX1
                                             string tmp({card4, card3, card2, card1, card0});
-                                            _cardsmap.insert({tmp, lv});
+                                            MathFunc::StringCopyToCardsKeyVal(tmp,CKInsert);
+                                            CKInsert._val=lv;
+                                            _HashMap.Insert(CKInsert);
                                         }
                                     }
                                 }
@@ -570,6 +614,7 @@ void Level::CreatMapHighCard()
     }
 }
 
+#if 0
 void Level::ShowMap()
 {
     GroupCards tmp(5);
@@ -600,9 +645,11 @@ void Level::ImageMap()
     }
 }
 
+#endif
+
 void Level::LoadMapFromFile()
 {
-    FILE* fp=std::fopen("../data/levelmap.dat","rb");
+    FILE* fp=std::fopen("levelmap.dat","rb");
     if(!fp)
     {
         cerr<<"File opening failed in load"<<endl;
@@ -612,39 +659,67 @@ void Level::LoadMapFromFile()
         WriteMapToFile();
         return;
     }
-    
-    /* int times=0; */
-    char tmp[5]={0};
-    LevelType tmp2;
+    std::fclose(fp);
+
     cout<<"start load levelmap.dat "<<endl;
     auto c_start=std::clock();
-    while(1){
-        
+    int fd=open("levelmap.dat",O_RDONLY);
+    int len =::lseek(fd,0,SEEK_END);
+    char *addr=(char*)::mmap(NULL,len,PROT_READ,MAP_PRIVATE,fd,0);
+    auto data=&_HashMap._valmap.front();
+    memcpy(data,addr,len);
+
+#if 0
+    /* while(1){ */
         auto ret=std::fread(&tmp,sizeof(tmp),1,fp);
         string stmp({tmp[0],tmp[1],tmp[2],tmp[3],tmp[4]});
         auto ret2=std::fread(&tmp2,sizeof(tmp2),1,fp);
         if(ret==0&&ret2==0)
         {
-            /* cout<<endl; */
             break;
         }
-        auto retm=_cardsmap.insert({stmp,tmp2}).second;
+        auto retm=_cardsmap.emplace(stmp,tmp2).second;
         if(!retm){
             cerr<<"load map lose\n";
             exit(1);
         }
-        /* ++times; */
-        /* cout<<"\r"<<times; */
-    }
+#endif
+#if 0
+        char *addr=(char*)::mmap(NULL,len,PROT_READ,MAP_PRIVATE,fd,0);
+        auto data=&_HashMap._valmap.front();
+        memcpy(data,addr,len);
+        int dat=0;
+        while(dat<=len)
+        {
+            stmp[0]=*data;
+            ++data;
+            stmp[1]=*data;
+            ++data;
+            stmp[2]=*data;
+            ++data;
+            stmp[3]=*data;
+            ++data;
+            stmp[4]=*data;
+            ++data;
+            tmp2=*(short*)data;
+            ++data;
+            ++data;
+            dat+=7;
+        }
+
+        munmap(addr,len);
+        break;
+    /* } */
+#endif
+    close(fd);
     auto c_end=std::clock();
     cout<<"time use :"<<1000*(c_end-c_start)/CLOCKS_PER_SEC<<" ms\n";
-    cout<<"map.size:"<<_cardsmap.size()<<endl;
-    std::fclose(fp);
-
+    /* cout<<"map.size:"<<_cardsmap.size()<<endl; */
+    /* std::fclose(fp); */
 }
 
 void Level::WriteMapToFile(){
-    FILE* fp=std::fopen("../data/levelmap.dat","wb");
+    FILE* fp=std::fopen("levelmap.dat","wb");
     if(!fp)
     {
         cerr<<"File opening failed in write"<<endl;
@@ -652,14 +727,13 @@ void Level::WriteMapToFile(){
     }
 
     int times=0;
-    for(auto &rm:_cardsmap)
+    int all=_HashMap._valmap.size();
+    for(auto &rm:_HashMap._valmap)
     {
-        std::fwrite(rm.first.c_str(),rm.first.size(),1,fp);
-        std::fwrite(&rm.second,sizeof(rm.second),1,fp);
+        std::fwrite(&rm,sizeof(LevelType),1,fp);
        ++times; 
-       cout<<"\r"<<times;
     }
+    printf("\nwrite:%d,all:%d",times,all);
     cout<<endl;
     std::fclose(fp);
-    
 }

@@ -2,7 +2,7 @@
 #define _CTL_DECKCARDS_HPP_
 
 #include "GroupCards.hpp"
-#include <random>
+#include <cstdlib>
 
 using UseType=unsigned int;
 
